@@ -40,10 +40,10 @@ public interface INursingPlanService
     /**
      * 修改护理计划
      * 
-     * @param nursingPlan 护理计划
+     * @param dto 护理计划
      * @return 结果
      */
-    public int updateNursingPlan(NursingPlan nursingPlan);
+    public int updateNursingPlan(NursingPlanDto dto);
 
     /**
      * 批量删除护理计划

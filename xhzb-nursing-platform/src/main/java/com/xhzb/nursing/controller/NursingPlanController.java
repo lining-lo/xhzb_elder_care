@@ -83,8 +83,8 @@ public class NursingPlanController extends BaseController {
     @PreAuthorize("@ss.hasPermi('nursing:nursingPlan:edit')")
     @Log(title = "护理计划", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody NursingPlan nursingPlan) {
-        return toAjax(nursingPlanService.updateNursingPlan(nursingPlan));
+    public AjaxResult edit(@RequestBody NursingPlanDto dto) {
+        return toAjax(nursingPlanService.updateNursingPlan(dto));
     }
 
     /**

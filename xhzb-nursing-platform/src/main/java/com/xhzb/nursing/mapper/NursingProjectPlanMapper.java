@@ -21,7 +21,7 @@ public interface NursingProjectPlanMapper
      */
     public NursingProjectPlan selectNursingProjectPlanById(Long id);
 
-    List<NursingProjectPlanVo> selectByPlanId(Long id);
+    List<NursingProjectPlanVo> selectByPlanId(Long planId);
 
     /**
      * 查询护理计划和项目关联列表

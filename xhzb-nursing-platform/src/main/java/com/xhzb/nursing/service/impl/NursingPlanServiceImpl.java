@@ -42,6 +42,7 @@ public class NursingPlanServiceImpl implements INursingPlanService {
         NursingPlan nursingPlan = nursingPlanMapper.selectNursingPlanById(Math.toIntExact(id));
         NursingPlanVo nursingPlanVo = new NursingPlanVo();
         BeanUtils.copyProperties(nursingPlan,nursingPlanVo);
+        nursingPlanVo.setId(id);
 
         //根据护理计划ID查询护理项目的关系
         List<NursingProjectPlanVo> list = nursingProjectPlanMapper.selectByPlanId(id);
@@ -85,19 +86,39 @@ public class NursingPlanServiceImpl implements INursingPlanService {
             //批量保存
             return nursingProjectPlanMapper.batchInsert(dto.getProjectPlans());
         }
-        return 0;
+        return 1;
     }
 
     /**
      * 修改护理计划
      *
-     * @param nursingPlan 护理计划
+     * @param dto 护理计划
      * @return 结果
      */
+    @Transactional
     @Override
-    public int updateNursingPlan(NursingPlan nursingPlan) {
+    public int updateNursingPlan(NursingPlanDto dto) {
+        NursingPlan nursingPlan = new NursingPlan();
+        BeanUtils.copyProperties(dto, nursingPlan);
+        if (dto.getId() != null) {
+            nursingPlan.setId(Math.toIntExact(dto.getId()));
+        }
         nursingPlan.setUpdateTime(DateUtils.getNowDate());
-        return nursingPlanMapper.updateNursingPlan(nursingPlan);
+        nursingPlanMapper.updateNursingPlan(nursingPlan);
+
+        if (dto.getProjectPlans() != null && !dto.getProjectPlans().isEmpty()) {
+            // 先删
+            nursingProjectPlanMapper.deleteNursingPlanByPlandId(nursingPlan.getId());
+
+            dto.getProjectPlans().forEach(projectPlan -> {
+                projectPlan.setPlanId(Long.valueOf(nursingPlan.getId()));
+                projectPlan.setCreateTime(DateUtils.getNowDate());
+            });
+
+            //批量保存
+            return nursingProjectPlanMapper.batchInsert(dto.getProjectPlans());
+        }
+        return 1;
     }
 
     /**
