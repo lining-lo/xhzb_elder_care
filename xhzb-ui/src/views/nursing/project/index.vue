@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择" clearable>
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in nursing_project_status" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -24,7 +24,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="projectList" @selection-change="handleSelectionChange">
-      <el-table-column label="序号" type="index" align="center" />
+      <el-table-column label="序号" type="index" align="center" :width="50" />
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="排序号" align="center" prop="orderNo" />
       <el-table-column label="单位" align="center" prop="unit" />
@@ -53,8 +53,9 @@
             v-hasPermi="['serve:project:edit']">修改</el-button>
           <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
             v-hasPermi="['serve:project:remove']">删除</el-button>
-          <el-button link :type="scope.row.status == 0 ? 'primary' : 'danger'" :icon="scope.row.status == 0 ? 'Lock' : 'Unlock'"
-            @click="handleEnable(scope.row)" v-hasPermi="['serve:project:edit']">{{ scope.row.status == 0 ? '启用' : '禁用'
+          <el-button link :type="scope.row.status == 0 ? 'primary' : 'danger'"
+            :icon="scope.row.status == 0 ? 'Lock' : 'Unlock'" @click="handleEnable(scope.row)"
+            v-hasPermi="['serve:project:edit']">{{ scope.row.status == 0 ? '启用' : '禁用'
             }}</el-button>
         </template>
       </el-table-column>
@@ -74,7 +75,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="排序号" prop="orderNo">
-              <el-input v-model="form.orderNo" placeholder="请输入排序号" />
+              <el-input-number v-model="form.orderNo" placeholder="请输入" :min="1" :max="20" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -84,7 +85,15 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="价格" prop="price">
-              <el-input v-model="form.price" placeholder="请输入价格" />
+              <el-input-number v-model="form.price" placeholder="请输入" :min="1" :max="100" :step="1" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="状态" prop="status">
+              <el-radio-group v-model="form.status">
+                <el-radio v-for="dict in nursing_project_status" :key="dict.value" :label="dict.value">{{
+                  dict.label }}</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -94,12 +103,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="护理要求" prop="nursingRequirement">
-              <el-input v-model="form.nursingRequirement" placeholder="请输入护理要求" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" placeholder="请输入备注" />
+              <el-input v-model="form.nursingRequirement" placeholder="请输入护理要求" type="textarea" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -129,17 +133,8 @@ const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
 
-//下拉选择框的选择项
-const options = ref([
-  {
-    value: 1,
-    label: "启用"
-  },
-  {
-    value: 0,
-    label: "停用"
-  }
-])
+//引用数据字典 字段名称和字典类型保持一致
+const { nursing_project_status } = proxy.useDict("nursing_project_status");
 
 const data = reactive({
   form: {},
@@ -150,6 +145,15 @@ const data = reactive({
     status: undefined,
   },
   rules: {
+    name: [
+      { required: true, message: "请输入名称", trigger: "blur" },
+    ],
+    price: [
+      { required: true, message: "请输入价格", trigger: "blur" }
+    ],
+    image: [
+      { required: true, message: "请上传图片", trigger: "blur" }
+    ]
   }
 })
 
@@ -240,13 +244,14 @@ function handleAdd() {
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
-  reset()
+  reset();
   const _id = row.id || ids.value
   getProject(_id).then(response => {
-    form.value = response.data
-    open.value = true
-    title.value = "修改护理项目"
-  })
+    form.value = response.data;
+    form.value.status = String(form.value.status)
+    open.value = true;
+    title.value = "修改护理项目";
+  });
 }
 
 /** 提交按钮 */
