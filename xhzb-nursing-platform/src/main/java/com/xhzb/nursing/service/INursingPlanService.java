@@ -2,6 +2,7 @@ package com.xhzb.nursing.service;
 
 import java.util.List;
 import com.xhzb.nursing.domain.NursingPlan;
+import com.xhzb.nursing.domain.NursingPlanDto;
 
 /**
  * 护理计划Service接口
@@ -29,11 +30,11 @@ public interface INursingPlanService
 
     /**
      * 新增护理计划
-     * 
-     * @param nursingPlan 护理计划
+     *
+     * @param dto 护理计划
      * @return 结果
      */
-    public int insertNursingPlan(NursingPlan nursingPlan);
+    public int insertNursingPlan(NursingPlanDto dto);
 
     /**
      * 修改护理计划

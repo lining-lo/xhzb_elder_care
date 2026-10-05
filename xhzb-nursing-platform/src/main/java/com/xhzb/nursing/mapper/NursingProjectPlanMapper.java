@@ -2,18 +2,19 @@ package com.xhzb.nursing.mapper;
 
 import java.util.List;
 import com.xhzb.nursing.domain.NursingProjectPlan;
+import com.xhzb.nursing.domain.NursingProjectPlanDto;
 
 /**
  * 护理计划和项目关联Mapper接口
- * 
+ *
  * @author lining-lo
  * @date 2026-10-05
  */
-public interface NursingProjectPlanMapper 
+public interface NursingProjectPlanMapper
 {
     /**
      * 查询护理计划和项目关联
-     * 
+     *
      * @param id 护理计划和项目关联主键
      * @return 护理计划和项目关联
      */
@@ -21,7 +22,7 @@ public interface NursingProjectPlanMapper
 
     /**
      * 查询护理计划和项目关联列表
-     * 
+     *
      * @param nursingProjectPlan 护理计划和项目关联
      * @return 护理计划和项目关联集合
      */
@@ -29,7 +30,7 @@ public interface NursingProjectPlanMapper
 
     /**
      * 新增护理计划和项目关联
-     * 
+     *
      * @param nursingProjectPlan 护理计划和项目关联
      * @return 结果
      */
@@ -37,7 +38,7 @@ public interface NursingProjectPlanMapper
 
     /**
      * 修改护理计划和项目关联
-     * 
+     *
      * @param nursingProjectPlan 护理计划和项目关联
      * @return 结果
      */
@@ -45,7 +46,7 @@ public interface NursingProjectPlanMapper
 
     /**
      * 删除护理计划和项目关联
-     * 
+     *
      * @param id 护理计划和项目关联主键
      * @return 结果
      */
@@ -53,9 +54,16 @@ public interface NursingProjectPlanMapper
 
     /**
      * 批量删除护理计划和项目关联
-     * 
+     *
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteNursingProjectPlanByIds(Long[] ids);
+
+    /**
+     * 批量新增
+     * @param projectPlans
+     * @return
+     */
+    int batchInsert(List<NursingProjectPlanDto> projectPlans);
 }
