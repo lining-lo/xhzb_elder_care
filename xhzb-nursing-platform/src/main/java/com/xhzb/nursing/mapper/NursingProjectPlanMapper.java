@@ -69,4 +69,6 @@ public interface NursingProjectPlanMapper
      * @return
      */
     int batchInsert(List<NursingProjectPlanDto> projectPlans);
+
+    void deleteNursingPlanByPlandId(Integer planId);
 }

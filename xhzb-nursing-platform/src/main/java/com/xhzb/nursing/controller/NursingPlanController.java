@@ -92,8 +92,8 @@ public class NursingPlanController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('nursing:nursingPlan:remove')")
     @Log(title = "护理计划", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Integer[] ids) {
-        return toAjax(nursingPlanService.deleteNursingPlanByIds(ids));
+    @DeleteMapping("/{id}")
+    public AjaxResult remove(@PathVariable Integer id) {
+        return toAjax(nursingPlanService.deleteNursingPlanById(id));
     }
 }

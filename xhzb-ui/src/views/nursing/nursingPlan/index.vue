@@ -534,7 +534,7 @@ function handleDelete(row) {
   proxy.$modal
     .confirm('是否确认删除护理计划编号为"' + _ids + '"的数据项？')
     .then(function () {
-      return delPlan(_ids);
+      return delNursingPlan(_ids);
     })
     .then(() => {
       getNursingPalnList();

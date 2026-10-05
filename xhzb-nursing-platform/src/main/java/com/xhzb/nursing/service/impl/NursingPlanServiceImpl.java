@@ -117,8 +117,11 @@ public class NursingPlanServiceImpl implements INursingPlanService {
      * @param id 护理计划主键
      * @return 结果
      */
+    @Transactional
     @Override
     public int deleteNursingPlanById(Integer id) {
-        return nursingPlanMapper.deleteNursingPlanById(id);
+        nursingProjectPlanMapper.deleteNursingPlanByPlandId(id);
+        int result = nursingPlanMapper.deleteNursingPlanById(id);
+        return result;
     }
 }
