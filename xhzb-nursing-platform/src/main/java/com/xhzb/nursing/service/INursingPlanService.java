@@ -3,6 +3,7 @@ package com.xhzb.nursing.service;
 import java.util.List;
 import com.xhzb.nursing.domain.NursingPlan;
 import com.xhzb.nursing.domain.NursingPlanDto;
+import com.xhzb.nursing.domain.NursingPlanVo;
 
 /**
  * 护理计划Service接口
@@ -14,11 +15,11 @@ public interface INursingPlanService
 {
     /**
      * 查询护理计划
-     * 
+     *
      * @param id 护理计划主键
      * @return 护理计划
      */
-    public NursingPlan selectNursingPlanById(Integer id);
+    public NursingPlanVo selectNursingPlanById(Long id);
 
     /**
      * 查询护理计划列表

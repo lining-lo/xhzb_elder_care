@@ -64,7 +64,7 @@ public class NursingPlanController extends BaseController {
     @PreAuthorize("@ss.hasPermi('nursing:nursingPlan:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Integer id) {
-        return success(nursingPlanService.selectNursingPlanById(id));
+        return success(nursingPlanService.selectNursingPlanById(Long.valueOf(id)));
     }
 
     /**

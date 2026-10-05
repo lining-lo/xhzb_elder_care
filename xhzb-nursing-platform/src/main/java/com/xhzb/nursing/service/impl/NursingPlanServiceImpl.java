@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.xhzb.common.utils.DateUtils;
 import com.xhzb.nursing.domain.NursingPlanDto;
+import com.xhzb.nursing.domain.NursingPlanVo;
+import com.xhzb.nursing.domain.NursingProjectPlanVo;
 import com.xhzb.nursing.mapper.NursingProjectPlanMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,18 @@ public class NursingPlanServiceImpl implements INursingPlanService {
      * @return 护理计划
      */
     @Override
-    public NursingPlan selectNursingPlanById(Integer id) {
-        return nursingPlanMapper.selectNursingPlanById(id);
+    public NursingPlanVo selectNursingPlanById(Long id)
+    {
+        //查询护理计划
+        NursingPlan nursingPlan = nursingPlanMapper.selectNursingPlanById(Math.toIntExact(id));
+        NursingPlanVo nursingPlanVo = new NursingPlanVo();
+        BeanUtils.copyProperties(nursingPlan,nursingPlanVo);
+
+        //根据护理计划ID查询护理项目的关系
+        List<NursingProjectPlanVo> list = nursingProjectPlanMapper.selectByPlanId(id);
+        nursingPlanVo.setProjectPlans(list);
+
+        return nursingPlanVo;
     }
 
     /**

@@ -3,6 +3,7 @@ package com.xhzb.nursing.mapper;
 import java.util.List;
 import com.xhzb.nursing.domain.NursingProjectPlan;
 import com.xhzb.nursing.domain.NursingProjectPlanDto;
+import com.xhzb.nursing.domain.NursingProjectPlanVo;
 
 /**
  * 护理计划和项目关联Mapper接口
@@ -19,6 +20,8 @@ public interface NursingProjectPlanMapper
      * @return 护理计划和项目关联
      */
     public NursingProjectPlan selectNursingProjectPlanById(Long id);
+
+    List<NursingProjectPlanVo> selectByPlanId(Long id);
 
     /**
      * 查询护理计划和项目关联列表
