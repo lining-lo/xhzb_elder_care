@@ -2,6 +2,8 @@ package com.xhzb.nursing.mapper;
 
 import java.util.List;
 import com.xhzb.nursing.domain.NursingProject;
+import com.xhzb.nursing.domain.NursingProjectVo;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 护理项目Mapper接口
@@ -58,4 +60,11 @@ public interface NursingProjectMapper
      * @return 结果
      */
     public int deleteNursingProjectByIds(Long[] ids);
+
+    /**
+     * 查询所有护理项目
+     * @return 结果
+     */
+    @Select("select id value,name label from nursing_project where status = 1 ")
+    List<NursingProjectVo> selectAll();
 }

@@ -2,6 +2,7 @@ package com.xhzb.nursing.service;
 
 import java.util.List;
 import com.xhzb.nursing.domain.NursingProject;
+import com.xhzb.nursing.domain.NursingProjectVo;
 
 /**
  * 护理项目Service接口
@@ -58,4 +59,10 @@ public interface INursingProjectService
      * @return 结果
      */
     public int deleteNursingProjectById(Long id);
+
+    /**
+     * 查询所有护理项目
+     * @return
+     */
+    List<NursingProjectVo> selectAll();
 }

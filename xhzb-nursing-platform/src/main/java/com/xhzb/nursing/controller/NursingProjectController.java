@@ -3,6 +3,7 @@ package com.xhzb.nursing.controller;
 import java.util.List;
 
 import com.xhzb.common.core.domain.R;
+import com.xhzb.nursing.domain.NursingProjectVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -105,5 +106,15 @@ public class NursingProjectController extends BaseController {
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@Parameter(description = "护理项目ID列表") @PathVariable Long[] ids) {
         return toAjax(nursingProjectService.deleteNursingProjectByIds(ids));
+    }
+
+    /**
+     * 查询护理项目列表
+     */
+    @GetMapping("/all")
+    public AjaxResult listAll()
+    {
+        List<NursingProjectVo> list = nursingProjectService.selectAll();
+        return success(list);
     }
 }

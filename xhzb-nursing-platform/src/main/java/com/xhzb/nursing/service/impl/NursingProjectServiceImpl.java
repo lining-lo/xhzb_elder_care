@@ -2,6 +2,7 @@ package com.xhzb.nursing.service.impl;
 
 import java.util.List;
 import com.xhzb.common.utils.DateUtils;
+import com.xhzb.nursing.domain.NursingProjectVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.NursingProjectMapper;
@@ -92,5 +93,14 @@ public class NursingProjectServiceImpl implements INursingProjectService
     public int deleteNursingProjectById(Long id)
     {
         return nursingProjectMapper.deleteNursingProjectById(id);
+    }
+
+    /**
+     * 查询所有护理项目
+     * @return
+     */
+    @Override
+    public List<NursingProjectVo> selectAll() {
+        return nursingProjectMapper.selectAll();
     }
 }
