@@ -24,6 +24,13 @@ logging:
 
 # Spring配置
 spring:
+  ai:
+    openai:
+      api-key: ${DASHSCOPE_API_KEY}  #读取环境变量中的api key
+      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      chat:
+        options:
+          model: qwen3.8-flash
   # 资源信息
   messages:
     # 国际化资源文件路径
@@ -76,7 +83,7 @@ springdoc:
       packages-to-scan: com.xhzb
 # oss的配置，要根据自己实际情况来进行修改
 oss:
-  endpoint: https://oss-cn-hangzhou.aliyuncs.com
+  endpoint: oss-cn-hangzhou.aliyuncs.com
   accessKeyId: ${OSS_ACCESS_KEY_ID}
   accessKeySecret: ${OSS_ACCESS_KEY_SECRET}
   bucketName: lining-qk
