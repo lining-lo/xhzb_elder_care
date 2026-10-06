@@ -83,12 +83,12 @@ public class Constants
     /**
      * 角色权限分隔符
      */
-    public static final String ROLE_DELIMITER = ",";
+    public static final String ROLE_DELIMETER = ",";
 
     /**
      * 权限标识分隔符
      */
-    public static final String PERMISSION_DELIMITER = ",";
+    public static final String PERMISSION_DELIMETER = ",";
 
     /**
      * 验证码有效期（分钟）
@@ -158,7 +158,7 @@ public class Constants
     /**
      * 自动识别json对象白名单配置（仅允许解析的包名，范围越小越安全）
      */
-    public static final String[] JSON_WHITELIST_STR = { "com.xhzb" };
+    public static final String[] JSON_WHITELIST_STR = { "org.springframework", "com.xhzb" };
 
     /**
      * 定时任务白名单配置（仅允许访问的包名，如其他需要可以自行添加）
@@ -170,35 +170,4 @@ public class Constants
      */
     public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "com.xhzb.common.utils.file", "com.xhzb.common.config", "com.xhzb.generator" };
-
-    /**
-     * 部门相关常量
-     */
-    public static class Dept
-    {
-        /**
-         * 全部数据权限
-         */
-        public static final String DATA_SCOPE_ALL = "1";
-
-        /**
-         * 自定数据权限
-         */
-        public static final String DATA_SCOPE_CUSTOM = "2";
-
-        /**
-         * 部门数据权限
-         */
-        public static final String DATA_SCOPE_DEPT = "3";
-
-        /**
-         * 部门及以下数据权限
-         */
-        public static final String DATA_SCOPE_DEPT_AND_CHILD = "4";
-
-        /**
-         * 仅本人数据权限
-         */
-        public static final String DATA_SCOPE_SELF = "5";
-    }
 }

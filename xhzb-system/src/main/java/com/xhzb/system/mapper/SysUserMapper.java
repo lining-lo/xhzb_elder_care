@@ -1,15 +1,18 @@
 package com.xhzb.system.mapper;
 
-import java.util.Date;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.xhzb.common.core.domain.entity.SysUser;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 用户表 数据层
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysUserMapper
 {
     /**
@@ -78,25 +81,6 @@ public interface SysUserMapper
     public int updateUserAvatar(@Param("userId") Long userId, @Param("avatar") String avatar);
 
     /**
-     * 修改用户状态
-     * 
-     * @param userId 用户ID
-     * @param status 状态
-     * @return 结果
-     */
-    public int updateUserStatus(@Param("userId") Long userId, @Param("status") String status);
-
-    /**
-     * 更新用户登录信息（IP和登录时间）
-     * 
-     * @param userId 用户ID
-     * @param loginIp 登录IP地址
-     * @param loginDate 登录时间
-     * @return 结果
-     */
-    public int updateLoginInfo(@Param("userId") Long userId, @Param("loginIp") String loginIp, @Param("loginDate") Date loginDate);
-
-    /**
      * 重置用户密码
      * 
      * @param userId 用户ID
@@ -144,4 +128,5 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
 }

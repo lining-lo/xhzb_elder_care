@@ -1,6 +1,8 @@
 package com.xhzb.system.mapper;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.xhzb.system.domain.SysUserRole;
 
@@ -9,6 +11,7 @@ import com.xhzb.system.domain.SysUserRole;
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysUserRoleMapper
 {
     /**

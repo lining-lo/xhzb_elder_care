@@ -1,6 +1,5 @@
 package com.xhzb.system.service;
 
-import java.util.Date;
 import java.util.List;
 import com.xhzb.common.core.domain.entity.SysUser;
 
@@ -163,16 +162,6 @@ public interface ISysUserService
     public boolean updateUserAvatar(Long userId, String avatar);
 
     /**
-     * 更新用户登录信息（IP和登录时间）
-     * 
-     * @param userId 用户ID
-     * @param loginIp 登录IP地址
-     * @param loginDate 登录时间
-     * @return 结果
-     */
-    public void updateLoginInfo(Long userId, String loginIp, Date loginDate);
-
-    /**
      * 重置用户密码
      * 
      * @param user 用户信息
@@ -214,4 +203,6 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+
 }

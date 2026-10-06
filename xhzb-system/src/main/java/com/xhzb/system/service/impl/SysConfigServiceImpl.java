@@ -5,10 +5,12 @@ import java.util.List;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.xhzb.common.annotation.DataSource;
 import com.xhzb.common.constant.CacheConstants;
 import com.xhzb.common.constant.UserConstants;
 import com.xhzb.common.core.redis.RedisCache;
 import com.xhzb.common.core.text.Convert;
+import com.xhzb.common.enums.DataSourceType;
 import com.xhzb.common.exception.ServiceException;
 import com.xhzb.common.utils.StringUtils;
 import com.xhzb.system.domain.SysConfig;
@@ -45,6 +47,7 @@ public class SysConfigServiceImpl implements ISysConfigService
      * @return 参数配置信息
      */
     @Override
+    @DataSource(DataSourceType.MASTER)
     public SysConfig selectConfigById(Long configId)
     {
         SysConfig config = new SysConfig();

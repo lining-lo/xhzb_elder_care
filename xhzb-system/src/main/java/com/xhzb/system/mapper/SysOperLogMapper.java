@@ -2,12 +2,14 @@ package com.xhzb.system.mapper;
 
 import java.util.List;
 import com.xhzb.system.domain.SysOperLog;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 操作日志 数据层
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysOperLogMapper
 {
     /**

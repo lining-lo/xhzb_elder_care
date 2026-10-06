@@ -1,15 +1,20 @@
 package com.xhzb.nursing.mapper;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xhzb.nursing.domain.NursingPlan;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 护理计划Mapper接口
  * 
- * @author lining-lo
- * @date 2026-10-04
+ * @author ruoyi
+ * @date 2025-03-28
  */
-public interface NursingPlanMapper 
+@Mapper
+public interface NursingPlanMapper extends BaseMapper<NursingPlan>
 {
     /**
      * 查询护理计划
@@ -17,7 +22,7 @@ public interface NursingPlanMapper
      * @param id 护理计划主键
      * @return 护理计划
      */
-    public NursingPlan selectNursingPlanById(Integer id);
+    public NursingPlan selectNursingPlanById(Long id);
 
     /**
      * 查询护理计划列表
@@ -49,7 +54,7 @@ public interface NursingPlanMapper
      * @param id 护理计划主键
      * @return 结果
      */
-    public int deleteNursingPlanById(Integer id);
+    public int deleteNursingPlanById(Long id);
 
     /**
      * 批量删除护理计划
@@ -57,5 +62,8 @@ public interface NursingPlanMapper
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteNursingPlanByIds(Integer[] ids);
+    public int deleteNursingPlanByIds(Long[] ids);
+
+    @Select("select id,plan_name planName from nursing_plan where status = 1")
+    List<NursingPlan> listAll();
 }

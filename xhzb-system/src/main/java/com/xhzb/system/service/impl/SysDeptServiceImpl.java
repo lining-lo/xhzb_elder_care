@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.xhzb.common.annotation.DataScope;
 import com.xhzb.common.constant.UserConstants;
 import com.xhzb.common.core.domain.TreeSelect;
 import com.xhzb.common.core.domain.entity.SysDept;
 import com.xhzb.common.core.domain.entity.SysRole;
+import com.xhzb.common.core.domain.entity.SysUser;
 import com.xhzb.common.core.text.Convert;
 import com.xhzb.common.exception.ServiceException;
 import com.xhzb.common.utils.SecurityUtils;
@@ -190,7 +190,7 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Override
     public void checkDeptDataScope(Long deptId)
     {
-        if (!SecurityUtils.isAdmin() && StringUtils.isNotNull(deptId))
+        if (!SysUser.isAdmin(SecurityUtils.getUserId()) && StringUtils.isNotNull(deptId))
         {
             SysDept dept = new SysDept();
             dept.setDeptId(deptId);
@@ -278,32 +278,6 @@ public class SysDeptServiceImpl implements ISysDeptService
         if (children.size() > 0)
         {
             deptMapper.updateDeptChildren(children);
-        }
-    }
-
-    /**
-     * 保存部门排序
-     *
-     * @param deptIds 部门ID数组
-     * @param orderNums 排序数组
-     */
-    @Override
-    @Transactional
-    public void updateDeptSort(String[] deptIds, String[] orderNums)
-    {
-        try
-        {
-            for (int i = 0; i < deptIds.length; i++)
-            {
-                SysDept dept = new SysDept();
-                dept.setDeptId(Convert.toLong(deptIds[i]));
-                dept.setOrderNum(Convert.toInt(orderNums[i]));
-                deptMapper.updateDeptSort(dept);
-            }
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException("保存排序异常，请联系管理员");
         }
     }
 

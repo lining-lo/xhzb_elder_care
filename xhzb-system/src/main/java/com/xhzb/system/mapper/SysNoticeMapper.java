@@ -2,12 +2,14 @@ package com.xhzb.system.mapper;
 
 import java.util.List;
 import com.xhzb.system.domain.SysNotice;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 通知公告表 数据层
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysNoticeMapper
 {
     /**

@@ -2,15 +2,16 @@ package com.xhzb.nursing.service;
 
 import java.util.List;
 import com.xhzb.nursing.domain.NursingProject;
-import com.xhzb.nursing.domain.NursingProjectVo;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.xhzb.nursing.domain.vo.NursingProjectVo;
 
 /**
  * 护理项目Service接口
  * 
- * @author lining
- * @date 2026-09-30
+ * @author ruoyi
+ * @date 2025-03-28
  */
-public interface INursingProjectService 
+public interface INursingProjectService extends IService<NursingProject>
 {
     /**
      * 查询护理项目
@@ -61,8 +62,8 @@ public interface INursingProjectService
     public int deleteNursingProjectById(Long id);
 
     /**
-     * 查询所有护理项目
+     * 查询所有的护理项目
      * @return
      */
-    List<NursingProjectVo> selectAll();
+    List<NursingProjectVo> listAll();
 }

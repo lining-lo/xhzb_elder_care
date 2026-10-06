@@ -5,14 +5,11 @@ import java.util.List;
 import jakarta.validation.constraints.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xhzb.common.annotation.Excel;
 import com.xhzb.common.annotation.Excel.ColumnType;
 import com.xhzb.common.annotation.Excel.Type;
 import com.xhzb.common.annotation.Excels;
 import com.xhzb.common.core.domain.BaseEntity;
-import com.xhzb.common.utils.SecurityUtils;
 import com.xhzb.common.xss.Xss;
 
 /**
@@ -70,7 +67,6 @@ public class SysUser extends BaseEntity
     private String loginIp;
 
     /** 最后登录时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
@@ -118,7 +114,12 @@ public class SysUser extends BaseEntity
 
     public boolean isAdmin()
     {
-        return SecurityUtils.isAdmin(this.userId);
+        return isAdmin(this.userId);
+    }
+
+    public static boolean isAdmin(Long userId)
+    {
+        return userId != null && 1L == userId;
     }
 
     public Long getDeptId()
@@ -199,7 +200,6 @@ public class SysUser extends BaseEntity
         this.avatar = avatar;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword()
     {
         return password;

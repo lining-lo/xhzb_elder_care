@@ -1,5 +1,7 @@
 package com.xhzb.system.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import java.util.List;
 import com.xhzb.system.domain.SysConfig;
 
@@ -8,6 +10,7 @@ import com.xhzb.system.domain.SysConfig;
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysConfigMapper
 {
     /**

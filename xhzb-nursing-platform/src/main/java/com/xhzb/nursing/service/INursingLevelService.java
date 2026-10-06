@@ -1,15 +1,18 @@
 package com.xhzb.nursing.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.xhzb.nursing.domain.NursingLevel;
+import com.xhzb.nursing.domain.vo.NursingLevelVo;
 
 /**
  * 护理等级Service接口
  * 
- * @author lining-lo
- * @date 2026-10-04
+ * @author ruoyi
+ * @date 2025-03-28
  */
-public interface INursingLevelService 
+public interface INursingLevelService  extends IService<NursingLevel>
 {
     /**
      * 查询护理等级
@@ -17,7 +20,7 @@ public interface INursingLevelService
      * @param id 护理等级主键
      * @return 护理等级
      */
-    public NursingLevel selectNursingLevelById(Integer id);
+    public NursingLevel selectNursingLevelById(Long id);
 
     /**
      * 查询护理等级列表
@@ -25,7 +28,7 @@ public interface INursingLevelService
      * @param nursingLevel 护理等级
      * @return 护理等级集合
      */
-    public List<NursingLevel> selectNursingLevelList(NursingLevel nursingLevel);
+    public List<NursingLevelVo> selectNursingLevelList(NursingLevel nursingLevel);
 
     /**
      * 新增护理等级
@@ -49,7 +52,7 @@ public interface INursingLevelService
      * @param ids 需要删除的护理等级主键集合
      * @return 结果
      */
-    public int deleteNursingLevelByIds(Integer[] ids);
+    public int deleteNursingLevelByIds(Long[] ids);
 
     /**
      * 删除护理等级信息
@@ -57,5 +60,6 @@ public interface INursingLevelService
      * @param id 护理等级主键
      * @return 结果
      */
-    public int deleteNursingLevelById(Integer id);
+    public int deleteNursingLevelById(Long id);
+
 }

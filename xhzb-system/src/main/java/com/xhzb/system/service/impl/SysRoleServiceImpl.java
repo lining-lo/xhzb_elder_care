@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.xhzb.common.annotation.DataScope;
 import com.xhzb.common.constant.UserConstants;
 import com.xhzb.common.core.domain.entity.SysRole;
+import com.xhzb.common.core.domain.entity.SysUser;
 import com.xhzb.common.exception.ServiceException;
 import com.xhzb.common.utils.SecurityUtils;
 import com.xhzb.common.utils.StringUtils;
@@ -196,7 +197,7 @@ public class SysRoleServiceImpl implements ISysRoleService
     @Override
     public void checkRoleDataScope(Long... roleIds)
     {
-        if (!SecurityUtils.isAdmin())
+        if (!SysUser.isAdmin(SecurityUtils.getUserId()))
         {
             for (Long roleId : roleIds)
             {

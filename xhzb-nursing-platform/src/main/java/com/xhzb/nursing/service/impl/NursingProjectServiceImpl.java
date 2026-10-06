@@ -1,25 +1,34 @@
 package com.xhzb.nursing.service.impl;
 
 import java.util.List;
-import com.xhzb.common.utils.DateUtils;
-import com.xhzb.nursing.domain.NursingProjectVo;
+
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.xhzb.common.exception.ServiceException;
+import com.xhzb.common.exception.base.BaseException;
+import com.xhzb.nursing.domain.NursingProjectPlan;
+import com.xhzb.nursing.domain.vo.NursingProjectVo;
+import com.xhzb.nursing.mapper.NursingProjectPlanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.NursingProjectMapper;
 import com.xhzb.nursing.domain.NursingProject;
 import com.xhzb.nursing.service.INursingProjectService;
-
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import java.util.Arrays;
 /**
  * 护理项目Service业务层处理
  * 
- * @author lining
- * @date 2026-09-30
+ * @author ruoyi
+ * @date 2025-03-28
  */
 @Service
-public class NursingProjectServiceImpl implements INursingProjectService 
+public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,NursingProject> implements INursingProjectService
 {
     @Autowired
     private NursingProjectMapper nursingProjectMapper;
+
+    @Autowired
+    private NursingProjectPlanMapper nursingProjectPlanMapper;
 
     /**
      * 查询护理项目
@@ -30,7 +39,7 @@ public class NursingProjectServiceImpl implements INursingProjectService
     @Override
     public NursingProject selectNursingProjectById(Long id)
     {
-        return nursingProjectMapper.selectNursingProjectById(id);
+        return getById(id);
     }
 
     /**
@@ -54,8 +63,7 @@ public class NursingProjectServiceImpl implements INursingProjectService
     @Override
     public int insertNursingProject(NursingProject nursingProject)
     {
-        nursingProject.setCreateTime(DateUtils.getNowDate());
-        return nursingProjectMapper.insertNursingProject(nursingProject);
+        return save(nursingProject)?1:0;
     }
 
     /**
@@ -67,8 +75,14 @@ public class NursingProjectServiceImpl implements INursingProjectService
     @Override
     public int updateNursingProject(NursingProject nursingProject)
     {
-        nursingProject.setUpdateTime(DateUtils.getNowDate());
-        return nursingProjectMapper.updateNursingProject(nursingProject);
+        //判断护理项目是否被引用，如果被引用，则不能修改
+        Long count = nursingProjectPlanMapper.selectCount(Wrappers.<NursingProjectPlan>lambdaQuery().eq(NursingProjectPlan::getProjectId, nursingProject.getId()));
+        if(count > 0){
+            throw new ServiceException("护理项目被引用，不能修改");
+        }
+
+
+        return updateById(nursingProject)?1:0;
     }
 
     /**
@@ -80,7 +94,12 @@ public class NursingProjectServiceImpl implements INursingProjectService
     @Override
     public int deleteNursingProjectByIds(Long[] ids)
     {
-        return nursingProjectMapper.deleteNursingProjectByIds(ids);
+        //判断护理项目是否被引用，如果被引用，则不能修改
+        Long count = nursingProjectPlanMapper.selectCount(Wrappers.<NursingProjectPlan>lambdaQuery().in(NursingProjectPlan::getProjectId, Arrays.asList(ids)));
+        if(count > 0){
+            throw new ServiceException("护理项目被引用，不能删除");
+        }
+        return removeByIds(Arrays.asList(ids))?1:0;
     }
 
     /**
@@ -92,15 +111,21 @@ public class NursingProjectServiceImpl implements INursingProjectService
     @Override
     public int deleteNursingProjectById(Long id)
     {
-        return nursingProjectMapper.deleteNursingProjectById(id);
+        //判断护理项目是否被引用，如果被引用，则不能修改
+        Long count = nursingProjectPlanMapper.selectCount(Wrappers.<NursingProjectPlan>lambdaQuery().eq(NursingProjectPlan::getProjectId, id));
+        if(count > 0){
+            throw new ServiceException("护理项目被引用，不能删除");
+        }
+
+        return removeById(id)?1:0;
     }
 
     /**
-     * 查询所有护理项目
+     * 查询所有的护理项目
      * @return
      */
     @Override
-    public List<NursingProjectVo> selectAll() {
-        return nursingProjectMapper.selectAll();
+    public List<NursingProjectVo> listAll() {
+        return nursingProjectMapper.listAll();
     }
 }

@@ -7,7 +7,6 @@ import com.xhzb.common.constant.Constants;
 import com.xhzb.common.utils.LogUtils;
 import com.xhzb.common.utils.ServletUtils;
 import com.xhzb.common.utils.StringUtils;
-import com.xhzb.common.utils.http.UserAgentUtils;
 import com.xhzb.common.utils.ip.AddressUtils;
 import com.xhzb.common.utils.ip.IpUtils;
 import com.xhzb.common.utils.spring.SpringUtils;
@@ -15,6 +14,7 @@ import com.xhzb.system.domain.SysLogininfor;
 import com.xhzb.system.domain.SysOperLog;
 import com.xhzb.system.service.ISysLogininforService;
 import com.xhzb.system.service.ISysOperLogService;
+import eu.bitwalker.useragentutils.UserAgent;
 
 /**
  * 异步工厂（产生任务用）
@@ -37,7 +37,7 @@ public class AsyncFactory
     public static TimerTask recordLogininfor(final String username, final String status, final String message,
             final Object... args)
     {
-        final String userAgent = ServletUtils.getRequest().getHeader("User-Agent");
+        final UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
         final String ip = IpUtils.getIpAddr();
         return new TimerTask()
         {
@@ -54,9 +54,9 @@ public class AsyncFactory
                 // 打印信息到日志
                 sys_user_logger.info(s.toString(), args);
                 // 获取客户端操作系统
-                String os = UserAgentUtils.getOperatingSystem(userAgent);
+                String os = userAgent.getOperatingSystem().getName();
                 // 获取客户端浏览器
-                String browser = UserAgentUtils.getBrowser(userAgent);
+                String browser = userAgent.getBrowser().getName();
                 // 封装对象
                 SysLogininfor logininfor = new SysLogininfor();
                 logininfor.setUserName(username);

@@ -1,13 +1,11 @@
 package com.xhzb.nursing.controller;
 
 import java.util.List;
-
-import com.xhzb.common.core.domain.R;
-import com.xhzb.nursing.domain.NursingProjectVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,16 +27,23 @@ import com.xhzb.common.core.page.TableDataInfo;
 
 /**
  * 护理项目Controller
- *
- * @author lining
- * @date 2026-09-30
+ * 
+ * @author ruoyi
+ * @date 2025-03-28
  */
-@Tag(name = "护理项目")
 @RestController
 @RequestMapping("/nursing/project")
-public class NursingProjectController extends BaseController {
+@Tag(name = "护理项目相关接口")
+public class NursingProjectController extends BaseController
+{
     @Autowired
     private INursingProjectService nursingProjectService;
+
+    @GetMapping("/all")
+    @Operation(summary = "查询所有护理项目")
+    public AjaxResult listAll(){
+        return success(nursingProjectService.listAll());
+    }
 
     /**
      * 查询护理项目列表
@@ -46,7 +51,8 @@ public class NursingProjectController extends BaseController {
     @Operation(summary = "查询护理项目列表")
     @PreAuthorize("@ss.hasPermi('nursing:project:list')")
     @GetMapping("/list")
-    public TableDataInfo list(NursingProject nursingProject) {
+    public TableDataInfo list(NursingProject nursingProject)
+    {
         startPage();
         List<NursingProject> list = nursingProjectService.selectNursingProjectList(nursingProject);
         return getDataTable(list);
@@ -59,7 +65,8 @@ public class NursingProjectController extends BaseController {
     @PreAuthorize("@ss.hasPermi('nursing:project:export')")
     @Log(title = "护理项目", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, NursingProject nursingProject) {
+    public void export(HttpServletResponse response, NursingProject nursingProject)
+    {
         List<NursingProject> list = nursingProjectService.selectNursingProjectList(nursingProject);
         ExcelUtil<NursingProject> util = new ExcelUtil<NursingProject>(NursingProject.class);
         util.exportExcel(response, list, "护理项目数据");
@@ -71,8 +78,10 @@ public class NursingProjectController extends BaseController {
     @Operation(summary = "获取护理项目详细信息")
     @PreAuthorize("@ss.hasPermi('nursing:project:query')")
     @GetMapping(value = "/{id}")
-    public R<NursingProject> getInfo(@Parameter(description = "护理项目ID") @PathVariable("id") Long id) {
-        return R.ok(nursingProjectService.selectNursingProjectById(id));
+    public AjaxResult getInfo(@Schema(name = "护理项目ID", requiredMode = Schema.RequiredMode.REQUIRED)
+            @PathVariable("id") Long id)
+    {
+        return success(nursingProjectService.selectNursingProjectById(id));
     }
 
     /**
@@ -82,7 +91,8 @@ public class NursingProjectController extends BaseController {
     @PreAuthorize("@ss.hasPermi('nursing:project:add')")
     @Log(title = "护理项目", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Parameter(description = "护理项目实体") @RequestBody NursingProject nursingProject) {
+    public AjaxResult add(@RequestBody NursingProject nursingProject)
+    {
         return toAjax(nursingProjectService.insertNursingProject(nursingProject));
     }
 
@@ -93,7 +103,8 @@ public class NursingProjectController extends BaseController {
     @PreAuthorize("@ss.hasPermi('nursing:project:edit')")
     @Log(title = "护理项目", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@Parameter(description = "护理项目实体") @RequestBody NursingProject nursingProject) {
+    public AjaxResult edit(@RequestBody NursingProject nursingProject)
+    {
         return toAjax(nursingProjectService.updateNursingProject(nursingProject));
     }
 
@@ -103,18 +114,9 @@ public class NursingProjectController extends BaseController {
     @Operation(summary = "删除护理项目")
     @PreAuthorize("@ss.hasPermi('nursing:project:remove')")
     @Log(title = "护理项目", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
-    public AjaxResult remove(@Parameter(description = "护理项目ID列表") @PathVariable Long[] ids) {
-        return toAjax(nursingProjectService.deleteNursingProjectByIds(ids));
-    }
-
-    /**
-     * 查询护理项目列表
-     */
-    @GetMapping("/all")
-    public AjaxResult listAll()
+	@DeleteMapping("/{ids}")
+    public AjaxResult remove(@Schema(name = "护理项目ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids)
     {
-        List<NursingProjectVo> list = nursingProjectService.selectAll();
-        return success(list);
+        return toAjax(nursingProjectService.deleteNursingProjectByIds(ids));
     }
 }

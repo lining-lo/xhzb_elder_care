@@ -2,12 +2,14 @@ package com.xhzb.system.mapper;
 
 import java.util.List;
 import com.xhzb.system.domain.SysRoleMenu;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 角色与菜单关联表 数据层
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysRoleMenuMapper
 {
     /**

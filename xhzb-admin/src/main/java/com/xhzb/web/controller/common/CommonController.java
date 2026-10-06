@@ -2,6 +2,9 @@ package com.xhzb.web.controller.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import com.xhzb.oss.client.OSSAliyunFileStorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -34,7 +37,7 @@ public class CommonController
     @Autowired
     private ServerConfig serverConfig;
 
-    private static final String FILE_DELIMITER = ",";
+    private static final String FILE_DELIMETER = ",";
 
     /**
      * 通用下载请求
@@ -68,6 +71,9 @@ public class CommonController
         }
     }
 
+    @Autowired
+    private OSSAliyunFileStorageService fileStorageService;
+
     /**
      * 通用上传请求（单个）
      */
@@ -76,15 +82,18 @@ public class CommonController
     {
         try
         {
-            // 上传文件路径
-            String filePath = RuoYiConfig.getUploadPath();
-            // 上传并返回新文件名称
-            String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
+            //文件名--->UUID.后缀
+            String originalFilename = file.getOriginalFilename();//abc.jpg
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String filename = UUID.randomUUID().toString()+extension;
+
+            //把文件上传到oss中
+            String url = fileStorageService.store(filename, file.getInputStream());
+
+
             AjaxResult ajax = AjaxResult.success();
             ajax.put("url", url);
-            ajax.put("fileName", fileName);
-            ajax.put("newFileName", FileUtils.getName(fileName));
+            ajax.put("fileName", url);
             ajax.put("originalFilename", file.getOriginalFilename());
             return ajax;
         }
@@ -119,10 +128,10 @@ public class CommonController
                 originalFilenames.add(file.getOriginalFilename());
             }
             AjaxResult ajax = AjaxResult.success();
-            ajax.put("urls", StringUtils.join(urls, FILE_DELIMITER));
-            ajax.put("fileNames", StringUtils.join(fileNames, FILE_DELIMITER));
-            ajax.put("newFileNames", StringUtils.join(newFileNames, FILE_DELIMITER));
-            ajax.put("originalFilenames", StringUtils.join(originalFilenames, FILE_DELIMITER));
+            ajax.put("urls", StringUtils.join(urls, FILE_DELIMETER));
+            ajax.put("fileNames", StringUtils.join(fileNames, FILE_DELIMETER));
+            ajax.put("newFileNames", StringUtils.join(newFileNames, FILE_DELIMETER));
+            ajax.put("originalFilenames", StringUtils.join(originalFilenames, FILE_DELIMETER));
             return ajax;
         }
         catch (Exception e)

@@ -1,5 +1,7 @@
 package com.xhzb.system.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.xhzb.common.core.domain.entity.SysDept;
@@ -9,6 +11,7 @@ import com.xhzb.common.core.domain.entity.SysDept;
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysDeptMapper
 {
     /**
@@ -107,13 +110,6 @@ public interface SysDeptMapper
      * @return 结果
      */
     public int updateDeptChildren(@Param("depts") List<SysDept> depts);
-
-    /**
-     * 保存部门排序
-     *
-     * @param dept 部门信息
-     */
-    public void updateDeptSort(SysDept dept);
 
     /**
      * 删除部门管理信息

@@ -1,8 +1,9 @@
 package com.xhzb.framework.config;
 
+import com.xhzb.common.utils.ServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
-import com.xhzb.common.utils.ServletUtils;
+
 
 /**
  * 服务相关配置

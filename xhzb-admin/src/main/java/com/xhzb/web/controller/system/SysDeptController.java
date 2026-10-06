@@ -1,7 +1,6 @@
 package com.xhzb.web.controller.system;
 
 import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,7 +62,7 @@ public class SysDeptController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:dept:query')")
     @GetMapping(value = "/{deptId}")
-    public AjaxResult getInfo(@PathVariable Long deptId)
+    public AjaxResult getInfo(@PathVariable("deptId") Long deptId)
     {
         deptService.checkDeptDataScope(deptId);
         return success(deptService.selectDeptById(deptId));
@@ -112,26 +111,12 @@ public class SysDeptController extends BaseController
     }
 
     /**
-     * 保存部门排序
-     */
-    @PreAuthorize("@ss.hasPermi('system:dept:edit')")
-    @Log(title = "保存部门排序", businessType = BusinessType.UPDATE)
-    @PutMapping("/updateSort")
-    public AjaxResult updateSort(@RequestBody Map<String, String> params)
-    {
-        String[] deptIds = params.get("deptIds").split(",");
-        String[] orderNums = params.get("orderNums").split(",");
-        deptService.updateDeptSort(deptIds, orderNums);
-        return success();
-    }
-
-    /**
      * 删除部门
      */
     @PreAuthorize("@ss.hasPermi('system:dept:remove')")
     @Log(title = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")
-    public AjaxResult remove(@PathVariable Long deptId)
+    public AjaxResult remove(@PathVariable("deptId") Long deptId)
     {
         if (deptService.hasChildByDeptId(deptId))
         {

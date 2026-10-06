@@ -15,10 +15,10 @@ import com.xhzb.common.core.domain.model.LoginUser;
 import com.xhzb.common.core.redis.RedisCache;
 import com.xhzb.common.utils.ServletUtils;
 import com.xhzb.common.utils.StringUtils;
-import com.xhzb.common.utils.http.UserAgentUtils;
 import com.xhzb.common.utils.ip.AddressUtils;
 import com.xhzb.common.utils.ip.IpUtils;
 import com.xhzb.common.utils.uuid.IdUtils;
+import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -161,12 +161,12 @@ public class TokenService
      */
     public void setUserAgent(LoginUser loginUser)
     {
-        String userAgent = ServletUtils.getRequest().getHeader("User-Agent");
+        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
         String ip = IpUtils.getIpAddr();
         loginUser.setIpaddr(ip);
         loginUser.setLoginLocation(AddressUtils.getRealAddressByIP(ip));
-        loginUser.setBrowser(UserAgentUtils.getBrowser(userAgent));
-        loginUser.setOs(UserAgentUtils.getOperatingSystem(userAgent));
+        loginUser.setBrowser(userAgent.getBrowser().getName());
+        loginUser.setOs(userAgent.getOperatingSystem().getName());
     }
 
     /**
@@ -175,7 +175,7 @@ public class TokenService
      * @param claims 数据声明
      * @return 令牌
      */
-    private String createToken(Map<String, Object> claims)
+    public String createToken(Map<String, Object> claims)
     {
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -189,7 +189,7 @@ public class TokenService
      * @param token 令牌
      * @return 数据声明
      */
-    private Claims parseToken(String token)
+    public Claims parseToken(String token)
     {
         return Jwts.parser()
                 .setSigningKey(secret)

@@ -47,6 +47,8 @@ public class SysLoginController
     @Autowired
     private ISysConfigService configService;
 
+
+
     /**
      * 登录方法
      * 
