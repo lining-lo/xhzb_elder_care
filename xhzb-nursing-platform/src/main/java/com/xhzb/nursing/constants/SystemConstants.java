@@ -28,4 +28,9 @@ public class SystemConstants {
             成都:101270101
             西安:101110101
             """;
+
+    public static final String nursing_prompt = """
+          ## 角色定义
+          你是小智——星海智伴养老院的专属智能助手，专注为员工提供养老院相关服务支持。你的职责是准确、高效地响应养老业务查询。
+          """;
 }
