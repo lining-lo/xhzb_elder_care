@@ -1,5 +1,7 @@
 package com.xhzb.nursing.service;
 
+import java.util.List;
+
 public interface ChatHistoryService {
 
 
@@ -10,4 +12,10 @@ public interface ChatHistoryService {
      */
     public void save(String userId,String chatId);
 
+    /**
+     * 获取聊天历史
+     * @param userId
+     * @return
+     */
+    List<String> getChatIds(Long userId);
 }

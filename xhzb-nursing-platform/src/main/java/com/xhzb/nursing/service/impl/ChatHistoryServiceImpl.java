@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+
 
 @Service
 public class ChatHistoryServiceImpl implements ChatHistoryService {
@@ -25,4 +29,21 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
         redisTemplate.opsForSet().add(CHAT_HISTORY_PREFIX+userId,chatId);
     }
 
+    /**
+     * 获取聊天历史
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<String> getChatIds(Long userId) {
+
+        Set<String> chatIds = redisTemplate.opsForSet().members(CHAT_HISTORY_PREFIX + userId);
+        if(chatIds == null || chatIds.isEmpty()){
+            return List.of();
+        }
+        //最好排个序
+        List<String> list = chatIds.stream().sorted(Comparator.comparing(String::toString)).toList();
+
+        return list;
+    }
 }
