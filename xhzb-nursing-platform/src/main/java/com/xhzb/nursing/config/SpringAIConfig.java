@@ -1,7 +1,9 @@
 package com.xhzb.nursing.config;
 
 import com.xhzb.nursing.constants.SystemConstants;
+import com.xhzb.nursing.service.impl.RedisChatMemoryService;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +18,14 @@ public class SpringAIConfig {
      * @return
      */
     @Bean
-    public ChatClient openAichatClient(OpenAiChatModel openAiChatModel) {
+    public ChatClient chatClient(OpenAiChatModel openAiChatModel,  RedisChatMemoryService redisChatMemoryService) {
         return ChatClient
                 .builder(openAiChatModel)
                 .defaultSystem(SystemConstants.nursing_prompt)
-                .defaultAdvisors(new SimpleLoggerAdvisor())  //添加默认的advisor 记录日志
+                .defaultAdvisors(
+                        new SimpleLoggerAdvisor(),
+                        MessageChatMemoryAdvisor.builder(redisChatMemoryService).build()
+                )
                 .build();
     }
 }
