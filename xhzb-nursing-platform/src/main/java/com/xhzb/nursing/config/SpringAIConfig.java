@@ -5,9 +5,12 @@ import com.xhzb.nursing.service.impl.RedisChatMemoryService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,17 +19,28 @@ public class SpringAIConfig {
 
     /**
      * 创建并返回一个ChatClient的Spring Bean实例。
+     *
      * @param openAiChatModel
      * @return
      */
     @Bean
-    public ChatClient chatClient(OpenAiChatModel openAiChatModel,  RedisChatMemoryService redisChatMemoryService) {
+    public ChatClient chatClient(OpenAiChatModel openAiChatModel, VectorStore vectorStore, RedisChatMemoryService redisChatMemoryService) {
+        // 检索rag的数据
+        QuestionAnswerAdvisor questionAnswerAdvisor = QuestionAnswerAdvisor
+                .builder(vectorStore)
+                .searchRequest(SearchRequest.builder()
+                        .similarityThreshold(0.7d)
+                        .topK(5)
+                        .build())
+                .build();
+
         return ChatClient
                 .builder(openAiChatModel)
                 .defaultSystem(SystemConstants.nursing_prompt)
                 .defaultAdvisors(
                         new SimpleLoggerAdvisor(),
-                        MessageChatMemoryAdvisor.builder(redisChatMemoryService).build()
+                        MessageChatMemoryAdvisor.builder(redisChatMemoryService).build(),
+                        questionAnswerAdvisor
                 )
                 .build();
     }
