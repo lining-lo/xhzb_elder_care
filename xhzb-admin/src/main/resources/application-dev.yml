@@ -31,6 +31,10 @@ spring:
       chat:
         options:
           model: qwen3.8-flash
+      embedding:
+        options:
+          model: text-embedding-v3
+          dimensions: 1024
   # 资源信息
   messages:
     # 国际化资源文件路径

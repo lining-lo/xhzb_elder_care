@@ -18,4 +18,10 @@ public interface ChatHistoryService {
      * @return
      */
     List<String> getChatIds(Long userId);
+
+    /**
+     * 删除聊天历史
+     * @param chatId
+     */
+    void delChatHistory(String chatId);
 }

@@ -1,5 +1,6 @@
 package com.xhzb.nursing.service.impl;
 
+import com.xhzb.common.utils.SecurityUtils;
 import com.xhzb.nursing.service.ChatHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,4 +47,15 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
 
         return list;
     }
+
+    /**
+     * 删除聊天历史
+     *
+     * @param chatId
+     */
+    @Override
+    public void delChatHistory(String chatId) {
+        redisTemplate.opsForSet().remove(CHAT_HISTORY_PREFIX + SecurityUtils.getUserId(),chatId);
+    }
+
 }
