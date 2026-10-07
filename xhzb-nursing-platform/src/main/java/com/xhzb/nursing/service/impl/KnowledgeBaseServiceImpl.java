@@ -1,9 +1,20 @@
 package com.xhzb.nursing.service.impl;
 
+import java.io.InputStream;
 import java.util.List;
 
+import cn.hutool.json.JSONUtil;
+import com.xhzb.common.exception.base.BaseException;
 import com.xhzb.common.utils.DateUtils;
+import com.xhzb.oss.client.OSSAliyunFileStorageService;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.ExtractedTextFormatter;
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig;
+import org.springframework.ai.transformer.splitter.TextSplitter;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.KnowledgeBaseMapper;
 import com.xhzb.nursing.domain.KnowledgeBase;
@@ -22,6 +33,15 @@ import java.util.Arrays;
 public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, KnowledgeBase> implements IKnowledgeBaseService {
     @Autowired
     private KnowledgeBaseMapper knowledgeBaseMapper;
+
+    @Autowired
+    private OSSAliyunFileStorageService fileStorageService;
+
+    @Autowired
+    private TextSplitter textSplitter;
+
+    @Autowired
+    private VectorStore vectorStore;
 
     /**
      * 查询知识库
@@ -46,14 +66,46 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, K
     }
 
     /**
-     * 新增知识库
+     * 新增知识库主
      *
-     * @param knowledgeBase 知识库
+     * @param knowledgeBase 知识库主
      * @return 结果
      */
     @Override
     public int insertKnowledgeBase(KnowledgeBase knowledgeBase) {
-        return save(knowledgeBase) ? 1 : 0;
+        // 下载文件
+        InputStream inputStream = fileStorageService.download(knowledgeBase.getDocumentUrl());
+        if(inputStream == null){
+            throw new BaseException("上传的文件不存在");
+        }
+
+        // 读取PDF
+        PagePdfDocumentReader pdfReader = new PagePdfDocumentReader(new InputStreamResource(inputStream),
+                PdfDocumentReaderConfig.builder()
+                        .withPageExtractedTextFormatter(ExtractedTextFormatter.defaults())
+                        .withPagesPerDocument(1) // 每1页PDF作为一个Document
+                        .build()
+        );
+
+        // 对PDF进行拆分
+        List<Document> documentList = textSplitter.split(pdfReader.read());
+
+        //获取所有的文档的id
+        List<String> documentIds = documentList.stream().map(Document::getId).toList();
+
+        // 分批次存储到向量数据库
+        int batchSize = 10;
+        for (int i = 0; i < documentList.size(); i += batchSize) {
+            List<Document> batch = documentList.subList(i, Math.min(i + batchSize, documentList.size()));
+            // 3.写入向量库
+            vectorStore.add(batch);
+            System.out.println("已添加批次: " + (i / batchSize + 1) + ", 数量: " + batch.size());
+        }
+
+        // 保存知识库文档到数据库
+        knowledgeBase.setCreateTime(DateUtils.getNowDate());
+        knowledgeBase.setRemark(JSONUtil.toJsonStr(documentIds));
+        return knowledgeBaseMapper.insertKnowledgeBase(knowledgeBase);
     }
 
     /**

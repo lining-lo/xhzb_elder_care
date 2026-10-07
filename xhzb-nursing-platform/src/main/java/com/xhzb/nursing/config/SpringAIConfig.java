@@ -6,6 +6,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.transformer.splitter.TextSplitter;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,6 +28,17 @@ public class SpringAIConfig {
                         new SimpleLoggerAdvisor(),
                         MessageChatMemoryAdvisor.builder(redisChatMemoryService).build()
                 )
+                .build();
+    }
+
+    @Bean
+    public TextSplitter textSplitter() {
+        return TokenTextSplitter.builder()
+                .withChunkSize(500)  //目标块大小  token数
+                .withMinChunkSizeChars(200) // 最小块的字符数
+                .withMinChunkLengthToEmbed(10) // 最小的文本字符长度
+                .withMaxNumChunks(10000)  //文档最大块数
+                .withKeepSeparator(false)   //不保留换行符
                 .build();
     }
 }
