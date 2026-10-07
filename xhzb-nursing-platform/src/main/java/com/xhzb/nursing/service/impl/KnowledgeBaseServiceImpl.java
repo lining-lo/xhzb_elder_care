@@ -75,7 +75,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, K
     public int insertKnowledgeBase(KnowledgeBase knowledgeBase) {
         // 下载文件
         InputStream inputStream = fileStorageService.download(knowledgeBase.getDocumentUrl());
-        if(inputStream == null){
+        if (inputStream == null) {
             throw new BaseException("上传的文件不存在");
         }
 
@@ -131,13 +131,25 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, K
     }
 
     /**
-     * 删除知识库信息
+     * 删除知识库主信息
      *
-     * @param id 知识库主键
+     * @param id 知识库主主键
      * @return 结果
      */
     @Override
     public int deleteKnowledgeBaseById(Long id) {
-        return removeById(id) ? 1 : 0;
+        //查数据
+        KnowledgeBase knowledgeBase = selectKnowledgeBaseById(id);
+        if (null == knowledgeBase) {
+            throw new BaseException("知识库不存在");
+        }
+        // 删除向量中的数据
+        String idsStr = knowledgeBase.getRemark();
+        List<String> ids = JSONUtil.toList(idsStr, String.class);
+        vectorStore.delete(ids);
+        //OSS中的数据 也要删除
+        fileStorageService.delete(knowledgeBase.getDocumentUrl());
+        // 删除mysql的数据
+        return knowledgeBaseMapper.deleteKnowledgeBaseById(id);
     }
 }

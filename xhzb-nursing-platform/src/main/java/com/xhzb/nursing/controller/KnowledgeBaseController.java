@@ -107,10 +107,9 @@ public class KnowledgeBaseController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('nursing:knowledgeBase:remove')")
     @Log(title = "知识库", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
-    @Operation(summary = "删除知识库")
-    public AjaxResult remove(@Schema(name = "知识库ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids) {
-        return toAjax(knowledgeBaseService.deleteKnowledgeBaseByIds(ids));
+    @DeleteMapping("/{id}")
+    public AjaxResult remove(@PathVariable Long id) {
+        return toAjax(knowledgeBaseService.deleteKnowledgeBaseById(id));
     }
 
     @PostMapping("/upload")
