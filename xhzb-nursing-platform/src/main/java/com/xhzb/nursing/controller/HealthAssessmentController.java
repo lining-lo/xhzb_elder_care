@@ -2,7 +2,9 @@ package com.xhzb.nursing.controller;
 
 import java.util.List;
 
+import com.xhzb.nursing.domain.HealthAssessmentReport;
 import com.xhzb.nursing.domain.dto.health.ElderAssessmentDto;
+import com.xhzb.nursing.service.IHealthAssessmentReportService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ import com.xhzb.common.core.page.TableDataInfo;
 public class HealthAssessmentController extends BaseController {
     @Autowired
     private IHealthAssessmentService healthAssessmentService;
+
+    @Autowired
+    private IHealthAssessmentReportService healthAssessmentReportService;
 
     /**
      * 查询健康评估记录列表
@@ -114,5 +119,30 @@ public class HealthAssessmentController extends BaseController {
     @PostMapping("/assessmentData")
     public AjaxResult assessmentData(@RequestBody ElderAssessmentDto dto) {
         return success(healthAssessmentService.assessmentData(dto));
+    }
+
+
+    /**
+     * 获取健康评估记录详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('nursing:healthAssessment:query')")
+    @GetMapping(value = "/report/{id}")
+    public AjaxResult getReportInfo(@PathVariable("id") Long id) {
+        HealthAssessmentReport report = healthAssessmentReportService.lambdaQuery()
+                .eq(HealthAssessmentReport::getHealthAssessmentId, id)
+                .one();
+        return success(report);
+    }
+
+    /**
+     * 取消评估
+     */
+    @PreAuthorize("@ss.hasPermi('nursing:healthAssessment:edit')")
+    @Log(title = "取消评估", businessType = BusinessType.UPDATE)
+    @PutMapping("/{id}")
+    @Operation(summary = "取消评估")
+    public AjaxResult edit(@PathVariable("id") Long id) {
+        healthAssessmentService.calcelHealthAssessment(id);
+        return success();
     }
 }

@@ -67,5 +67,7 @@ public interface IHealthAssessmentService extends IService<HealthAssessment> {
      * @param dto
      * @return
      */
-    Long assessmentData(ElderAssessmentDto dto) ;
+    public Long assessmentData(ElderAssessmentDto dto) ;
+
+    public void calcelHealthAssessment(Long id);
 }

@@ -296,6 +296,16 @@ public class HealthAssessmentServiceImpl extends ServiceImpl<HealthAssessmentMap
         return dto.getId();
     }
 
+    /**
+     * 取消评估
+     */
+    @Override
+    public void calcelHealthAssessment(Long id) {
+        this.lambdaUpdate().eq(HealthAssessment::getId, id)
+                .set(HealthAssessment::getEvaluationProgress, 2)
+                .update();
+    }
+
 
     /**
      * 评估老人体检报告
