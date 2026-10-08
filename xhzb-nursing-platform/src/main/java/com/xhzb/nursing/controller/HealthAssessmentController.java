@@ -107,10 +107,10 @@ public class HealthAssessmentController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('nursing:healthAssessment:remove')")
     @Log(title = "健康评估记录", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "删除健康评估记录")
-    public AjaxResult remove(@Schema(name = "健康评估记录ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids) {
-        return toAjax(healthAssessmentService.deleteHealthAssessmentByIds(ids));
+    public AjaxResult remove(@Schema(name = "健康评估记录ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long id) {
+        return toAjax(healthAssessmentService.deleteHealthAssessmentById(id));
     }
 
     /**

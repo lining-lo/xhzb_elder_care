@@ -171,8 +171,11 @@ public class HealthAssessmentServiceImpl extends ServiceImpl<HealthAssessmentMap
      * @param id 健康评估记录主键
      * @return 结果
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteHealthAssessmentById(Long id) {
+        healthAssessmentReportService.deleteHealthAssessmentReportById(id);
+        healthAssessmentDataCollectionService.deleteHealthAssessmentDataCollectionById(id);
         return removeById(id) ? 1 : 0;
     }
 
