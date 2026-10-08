@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
+    <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.xhzb</groupId>
     <artifactId>xhzb</artifactId>
     <version>3.9.0</version>
@@ -11,7 +11,7 @@
     <name>xhzb</name>
     <url>http://www.xhzb.com</url>
     <description>星海智伴后台管理系统</description>
-    
+
     <properties>
         <xhzb.version>3.9.0</xhzb.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,6 +34,7 @@
         <springdoc.version>2.8.14</springdoc.version>
         <jsqlparser.version>4.9</jsqlparser.version>
         <spring-ai-bom.version>1.1.2</spring-ai-bom.version>
+        <pdfbox.version>2.0.24</pdfbox.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -206,6 +207,13 @@
                 <version>${spring-ai-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- pdf解析 -->
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>${pdfbox.version}</version>
             </dependency>
         </dependencies>
 

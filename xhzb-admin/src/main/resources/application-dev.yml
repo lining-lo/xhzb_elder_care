@@ -30,7 +30,7 @@ spring:
       base-url: https://dashscope.aliyuncs.com/compatible-mode
       chat:
         options:
-          model: qwen3.8-flash
+          model: deepseek-v4-flash-0731
       embedding:
         options:
           model: text-embedding-v3

@@ -107,4 +107,12 @@ public class HealthAssessmentController extends BaseController {
     public AjaxResult remove(@Schema(name = "健康评估记录ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids) {
         return toAjax(healthAssessmentService.deleteHealthAssessmentByIds(ids));
     }
+
+    /**
+     * 评估数据
+     */
+    @PostMapping("/assessmentData")
+    public AjaxResult assessmentData(@RequestBody ElderAssessmentDto dto) {
+        return success(healthAssessmentService.assessmentData(dto));
+    }
 }
