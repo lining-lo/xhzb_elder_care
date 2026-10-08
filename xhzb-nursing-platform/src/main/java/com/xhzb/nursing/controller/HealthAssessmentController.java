@@ -93,8 +93,8 @@ public class HealthAssessmentController extends BaseController {
     @Log(title = "健康评估记录", businessType = BusinessType.UPDATE)
     @PutMapping
     @Operation(summary = "修改健康评估记录")
-    public AjaxResult edit(@RequestBody HealthAssessment healthAssessment) {
-        return toAjax(healthAssessmentService.updateHealthAssessment(healthAssessment));
+    public AjaxResult edit(@RequestBody ElderAssessmentDto dto) {
+        return success(healthAssessmentService.updateHealthAssessment(dto));
     }
 
     /**

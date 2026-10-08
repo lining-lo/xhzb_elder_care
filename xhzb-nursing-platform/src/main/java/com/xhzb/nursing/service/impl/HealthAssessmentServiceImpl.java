@@ -1,22 +1,20 @@
 package com.xhzb.nursing.service.impl;
 
-import java.util.List;
-
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xhzb.common.exception.base.BaseException;
-import com.xhzb.common.utils.DateUtils;
+import com.xhzb.nursing.domain.HealthAssessment;
 import com.xhzb.nursing.domain.HealthAssessmentDataCollection;
 import com.xhzb.nursing.domain.dto.health.ElderAssessmentDto;
+import com.xhzb.nursing.mapper.HealthAssessmentMapper;
 import com.xhzb.nursing.service.IHealthAssessmentDataCollectionService;
+import com.xhzb.nursing.service.IHealthAssessmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.xhzb.nursing.mapper.HealthAssessmentMapper;
-import com.xhzb.nursing.domain.HealthAssessment;
-import com.xhzb.nursing.service.IHealthAssessmentService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 健康评估记录Service业务层处理
@@ -64,7 +62,17 @@ public class HealthAssessmentServiceImpl extends ServiceImpl<HealthAssessmentMap
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Long insertHealthAssessment(ElderAssessmentDto dto) {
-        // 保存两份数据，评估记录表，评估数据收集表  注意，这两个表的主键是一样的
+        return saveOrUpdateHealthAssessment(dto);
+    }
+
+    /**
+     * 新增或修改健康评估记录
+     *
+     * @param dto
+     * @return
+     */
+    private Long saveOrUpdateHealthAssessment(ElderAssessmentDto dto) {
+        // 保存两份数据，评估基本信息表，评估详细数据表  注意，这两个表的主键是一样的
         HealthAssessment healthAssessment = new HealthAssessment();
         // 如果id不为空，则根据id查询评估基本信息
         if (dto.getId() != null) {
@@ -82,7 +90,6 @@ public class HealthAssessmentServiceImpl extends ServiceImpl<HealthAssessmentMap
             // 评估进度  默认为0  评估中
             healthAssessment.setEvaluationProgress(0);
         }
-
         // 老人姓名  从基本信息中获取
         healthAssessment.setElderName(dto.getBasicInfo().getElderName());
         // 身份证号码  从基本信息中获取
@@ -117,12 +124,13 @@ public class HealthAssessmentServiceImpl extends ServiceImpl<HealthAssessmentMap
     /**
      * 修改健康评估记录
      *
-     * @param healthAssessment 健康评估记录
+     * @param dto 健康评估记录
      * @return 结果
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public int updateHealthAssessment(HealthAssessment healthAssessment) {
-        return updateById(healthAssessment) ? 1 : 0;
+    public Long updateHealthAssessment(ElderAssessmentDto dto) {
+        return saveOrUpdateHealthAssessment(dto);
     }
 
     /**
