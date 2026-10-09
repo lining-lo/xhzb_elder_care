@@ -1,6 +1,10 @@
 package com.xhzb.nursing.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xhzb.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,5 +96,32 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     public int deleteContractById(Long id)
     {
         return removeById(id)? 1 : 0;
+    }
+
+    /**
+     * 更新合同状态
+     */
+    @Override
+    public void updateContractStatus() {
+        //查询合同，状态为0的  开始时间小于等于当前时间
+        LambdaQueryWrapper<Contract> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Contract::getStatus,0);
+        queryWrapper.le(Contract::getStartDate, LocalDateTime.now());
+        List<Contract> list = list(queryWrapper);
+        //判断是否为空
+        /*if(list != null && list.size() > 0){
+
+        }*/
+        if(CollUtil.isEmpty(list)){
+            return;
+        }
+
+        //更新合同状态
+        list.forEach(contract -> {
+            contract.setStatus(1);
+        });
+
+        //批量更新
+        updateBatchById(list);
     }
 }
