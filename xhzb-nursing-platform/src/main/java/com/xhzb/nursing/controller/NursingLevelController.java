@@ -26,15 +26,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 护理等级Controller
- * 
+ *
  * @author ruoyi
  * @date 2025-03-28
  */
 @RestController
 @RequestMapping("/nursing/nursingLevel")
 @Tag(name = "护理等级相关接口")
-public class NursingLevelController extends BaseController
-{
+public class NursingLevelController extends BaseController {
     @Autowired
     private INursingLevelService nursingLevelService;
 
@@ -44,8 +43,7 @@ public class NursingLevelController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:nursingLevel:list')")
     @GetMapping("/list")
     @Operation(summary = "查询护理等级列表")
-    public TableDataInfo list(NursingLevel nursingLevel)
-    {
+    public TableDataInfo list(NursingLevel nursingLevel) {
         startPage();
         List<NursingLevelVo> list = nursingLevelService.selectNursingLevelList(nursingLevel);
         return getDataTable(list);
@@ -57,8 +55,7 @@ public class NursingLevelController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:nursingLevel:query')")
     @GetMapping(value = "/{id}")
     @Operation(summary = "获取护理等级详细信息")
-    public AjaxResult getInfo(@Schema(name = "护理等级ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable("id") Long id)
-    {
+    public AjaxResult getInfo(@Schema(name = "护理等级ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable("id") Long id) {
         return success(nursingLevelService.selectNursingLevelById(id));
     }
 
@@ -69,8 +66,7 @@ public class NursingLevelController extends BaseController
     @Log(title = "护理等级", businessType = BusinessType.INSERT)
     @PostMapping
     @Operation(summary = "新增护理等级")
-    public AjaxResult add(@RequestBody NursingLevel nursingLevel)
-    {
+    public AjaxResult add(@RequestBody NursingLevel nursingLevel) {
         return toAjax(nursingLevelService.insertNursingLevel(nursingLevel));
     }
 
@@ -81,8 +77,7 @@ public class NursingLevelController extends BaseController
     @Log(title = "护理等级", businessType = BusinessType.UPDATE)
     @PutMapping
     @Operation(summary = "修改护理等级")
-    public AjaxResult edit(@RequestBody NursingLevel nursingLevel)
-    {
+    public AjaxResult edit(@RequestBody NursingLevel nursingLevel) {
         return toAjax(nursingLevelService.updateNursingLevel(nursingLevel));
     }
 
@@ -91,10 +86,18 @@ public class NursingLevelController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('nursing:nursingLevel:remove')")
     @Log(title = "护理等级", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     @Operation(summary = "删除护理等级")
-    public AjaxResult remove(@Schema(name = "护理等级ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids)
-    {
+    public AjaxResult remove(@Schema(name = "护理等级ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids) {
         return toAjax(nursingLevelService.deleteNursingLevelByIds(ids));
+    }
+
+    /**
+     * 查询所有护理等级
+     */
+    @GetMapping("/listAll")
+    public AjaxResult listAll(){
+        List<NursingLevel> list = nursingLevelService.lambdaQuery().eq(NursingLevel::getStatus, 1).list();
+        return success(list);
     }
 }
