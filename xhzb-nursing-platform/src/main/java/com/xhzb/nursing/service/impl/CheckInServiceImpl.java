@@ -1,15 +1,19 @@
 package com.xhzb.nursing.service.impl;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.xhzb.common.utils.DateUtils;
 import com.xhzb.nursing.domain.*;
+import com.xhzb.nursing.domain.vo.*;
 import com.xhzb.nursing.domain.dto.CheckInApplyDto;
 import com.xhzb.nursing.service.*;
 import com.xhzb.nursing.util.CodeGenerator;
+import com.xhzb.nursing.util.IDCardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.CheckInMapper;
@@ -160,6 +164,83 @@ public class CheckInServiceImpl extends ServiceImpl<CheckInMapper, CheckIn> impl
                 .eq(HealthAssessmentReport::getHealthAssessmentId, healthAssessment.getId())
                 .set(HealthAssessmentReport::getCheckInStatus, 1)
                 .update();
+    }
+
+    /**
+     * 查询申请入住详情
+     *
+     * @param id 入住主键
+     * @return 入住详情
+     */
+    @Override
+    public CheckInDetailVo getCheckInDetail(Long id) {
+        CheckIn checkIn = getById(id);
+        if (Objects.isNull(checkIn)) {
+            throw new IllegalArgumentException("入住信息不存在");
+        }
+
+        CheckInDetailVo detailVo = new CheckInDetailVo();
+
+        // 老人信息
+        Elder elder = elderService.getById(checkIn.getElderId());
+        if (Objects.nonNull(elder)) {
+            CheckInElderVo elderVo = BeanUtil.toBean(elder, CheckInElderVo.class);
+            elderVo.setAge(getAge(elder));
+            detailVo.setCheckInElderVo(elderVo);
+        }
+
+        // 家属信息（申请入住时以JSON形式保存在入住记录的备注字段中）
+        if (checkIn.getRemark() != null && !checkIn.getRemark().isEmpty()) {
+            try {
+                detailVo.setElderFamilyVoList(JSONUtil.toList(checkIn.getRemark(), ElderFamilyVo.class));
+            } catch (Exception ignored) {
+                // 备注不是家属信息JSON时忽略
+            }
+        }
+
+        // 入住配置
+        CheckInConfig checkInConfig = checkInConfigService.lambdaQuery()
+                .eq(CheckInConfig::getCheckInId, Math.toIntExact(id))
+                .one();
+        if (Objects.nonNull(checkInConfig)) {
+            CheckInConfigVo configVo = BeanUtil.toBean(checkInConfig, CheckInConfigVo.class);
+            configVo.setStartDate(checkIn.getStartDate());
+            configVo.setEndDate(checkIn.getEndDate());
+            configVo.setBedNumber(checkIn.getBedNumber());
+            detailVo.setCheckInConfigVo(configVo);
+        }
+
+        // 签约办理
+        Contract contract = contractService.lambdaQuery()
+                .eq(Contract::getElderId, checkIn.getElderId())
+                .orderByDesc(Contract::getId)
+                .last("limit 1")
+                .one();
+        detailVo.setContract(contract);
+
+        return detailVo;
+    }
+
+    /**
+     * 根据身份证号（优先）或出生日期计算年龄
+     */
+    private Integer getAge(Elder elder) {
+        try {
+            if (elder.getIdCardNo() != null && !elder.getIdCardNo().isEmpty()) {
+                return IDCardUtils.getAgeByIdCard(elder.getIdCardNo());
+            }
+        } catch (Exception ignored) {
+            // 身份证号不合法时回退到出生日期计算
+        }
+        try {
+            if (elder.getBirthday() != null && !elder.getBirthday().isEmpty()) {
+                LocalDate birthday = LocalDate.parse(elder.getBirthday());
+                return Period.between(birthday, LocalDate.now()).getYears();
+            }
+        } catch (Exception ignored) {
+            // 忽略无法解析的出生日期
+        }
+        return null;
     }
 
     /**

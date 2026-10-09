@@ -76,6 +76,16 @@ public class CheckInController extends BaseController {
     }
 
     /**
+     * 查看申请入住详情
+     */
+    @GetMapping("/detail/{id}")
+    @Operation(summary = "查看申请入住详情")
+    public AjaxResult detail(@Schema(name = "入住ID", requiredMode = Schema.RequiredMode.REQUIRED)
+                             @PathVariable("id") Long id) {
+        return success(checkInService.getCheckInDetail(id));
+    }
+
+    /**
      * 新增入住
      */
     @PreAuthorize("@ss.hasPermi('nursing:checkIn:add')")

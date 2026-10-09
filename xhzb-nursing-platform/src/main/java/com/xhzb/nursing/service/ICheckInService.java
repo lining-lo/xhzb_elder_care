@@ -4,6 +4,7 @@ import java.util.List;
 import com.xhzb.nursing.domain.CheckIn;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xhzb.nursing.domain.dto.CheckInApplyDto;
+import com.xhzb.nursing.domain.vo.CheckInDetailVo;
 
 /**
  * 入住Service接口
@@ -65,4 +66,12 @@ public interface ICheckInService extends IService<CheckIn>
      * 申请入住
      */
     void applyCheckIn(CheckInApplyDto dto);
+
+    /**
+     * 查询申请入住详情
+     *
+     * @param id 入住主键
+     * @return 入住详情
+     */
+    CheckInDetailVo getCheckInDetail(Long id);
 }
