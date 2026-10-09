@@ -3,6 +3,7 @@ package com.xhzb.nursing.service;
 import java.util.List;
 import com.xhzb.nursing.domain.CheckIn;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xhzb.nursing.domain.dto.CheckInApplyDto;
 
 /**
  * 入住Service接口
@@ -59,4 +60,9 @@ public interface ICheckInService extends IService<CheckIn>
      * @return 结果
      */
     public int deleteCheckInById(Long id);
+
+    /**
+     * 申请入住
+     */
+    void applyCheckIn(CheckInApplyDto dto);
 }
