@@ -2,6 +2,7 @@ package com.xhzb.nursing.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xhzb.nursing.domain.Floor;
+import com.xhzb.nursing.domain.vo.TreeVo;
 import com.xhzb.nursing.mapper.FloorMapper;
 import com.xhzb.nursing.service.IFloorService;
 import com.xhzb.nursing.domain.vo.FloorVo;
@@ -91,5 +92,15 @@ public class FloorServiceImpl extends ServiceImpl<FloorMapper, Floor> implements
     @Override
     public List<Floor> selectAllByNur() {
         return floorMapper.selectAllByNur();
+    }
+
+    /**
+     * 查询楼层房间床位
+     * @param status
+     * @return
+     */
+    @Override
+    public List<TreeVo> getRoomAndBedByBedStatus(Integer status) {
+        return floorMapper.getRoomAndBedByBedStatus(status);
     }
 }
