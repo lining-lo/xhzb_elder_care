@@ -1,6 +1,7 @@
 package com.xhzb.nursing.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.xhzb.nursing.domain.HealthAssessment;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -70,4 +71,9 @@ public interface IHealthAssessmentService extends IService<HealthAssessment> {
     public Long assessmentData(ElderAssessmentDto dto) ;
 
     public void calcelHealthAssessment(Long id);
+
+    /**
+     * 查看老人信息详情
+     */
+    Map<String, Object> getElderInfoById(Long id);
 }

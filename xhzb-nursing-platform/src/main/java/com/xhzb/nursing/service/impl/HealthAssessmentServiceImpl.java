@@ -25,7 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 健康评估记录Service业务层处理
@@ -307,6 +309,48 @@ public class HealthAssessmentServiceImpl extends ServiceImpl<HealthAssessmentMap
         this.lambdaUpdate().eq(HealthAssessment::getId, id)
                 .set(HealthAssessment::getEvaluationProgress, 2)
                 .update();
+    }
+
+    /**
+     * 查询老人详情
+     * @param id
+     * @return
+     */
+    @Override
+    public Map<String, Object> getElderInfoById(Long id) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        // 查询主表 healthAssessment
+        HealthAssessment healthAssessment = getById(id);
+        resultMap.put("coreSuggestion",healthAssessment.getCoreSuggestion());
+        resultMap.put("name",healthAssessment.getElderName());
+        resultMap.put("idCardNo",healthAssessment.getIdCard());
+
+        // 查询采集表 healthAssessmentDataColection
+        // select basic_info from xxxx
+        HealthAssessmentDataCollection healthAssessmentDataCollection = healthAssessmentDataCollectionService.lambdaQuery()
+                .eq(HealthAssessmentDataCollection::getId, id)
+                .select(HealthAssessmentDataCollection::getBasicInfo)
+                .one();
+        if(healthAssessmentDataCollection != null && !healthAssessmentDataCollection.getBasicInfo().isEmpty()){
+            String basicInfoStr = healthAssessmentDataCollection.getBasicInfo();
+            JSONObject jsonObject = JSONUtil.parseObj(basicInfoStr);
+
+            resultMap.put("phone",jsonObject.getStr("elderContact"));
+
+            resultMap.put("medicalPaymentMethod",jsonObject.getStr("medicalPaymentMethod"));
+            resultMap.put("nation",jsonObject.getStr("nation"));
+            resultMap.put("educationLevel",jsonObject.getStr("educationLevel"));
+            resultMap.put("socialSecurityCard",jsonObject.getStr("socialSecurityCard"));
+            resultMap.put("livingSituation",jsonObject.getStr("livingSituation"));
+            resultMap.put("religiousBelief",jsonObject.getStr("religiousBelief"));
+            resultMap.put("economicSource",jsonObject.getStr("economicSource"));
+            resultMap.put("maritalStatus",jsonObject.getStr("maritalStatus"));
+
+        }
+
+        return resultMap;
     }
 
 

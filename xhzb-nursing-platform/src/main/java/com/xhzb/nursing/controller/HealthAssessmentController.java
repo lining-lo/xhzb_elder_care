@@ -1,6 +1,7 @@
 package com.xhzb.nursing.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import com.xhzb.nursing.domain.HealthAssessmentReport;
 import com.xhzb.nursing.domain.dto.health.ElderAssessmentDto;
@@ -144,5 +145,14 @@ public class HealthAssessmentController extends BaseController {
     public AjaxResult edit(@PathVariable("id") Long id) {
         healthAssessmentService.calcelHealthAssessment(id);
         return success();
+    }
+
+    /**
+     * 查看老人信息详情
+     */
+    @GetMapping("/elder/{id}")
+    public AjaxResult getElderInfoById(@PathVariable Long id){
+        Map<String,Object> list = healthAssessmentService.getElderInfoById(id);
+        return success(list);
     }
 }
