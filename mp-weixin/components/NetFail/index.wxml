@@ -1,0 +1,1 @@
+<view class="net-fail data-v-44cb6724" style="{{'padding-top:' + c}}"><image class="data-v-44cb6724" src="{{a}}"/><view class="tips data-v-44cb6724">网络开小差了</view><view class="btn data-v-44cb6724" bindtap="{{b}}">重新加载</view></view>

@@ -1,0 +1,11 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "星海智伴",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "phone": "../../components/uni-phone/index",
+    "fast-menu": "./components/FastMenu",
+    "hot-list": "./components/HotList",
+    "appointment": "./components/Appointment"
+  }
+}
