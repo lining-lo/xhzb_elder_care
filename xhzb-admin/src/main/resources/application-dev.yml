@@ -91,3 +91,7 @@ oss:
   accessKeyId: ${OSS_ACCESS_KEY_ID}
   accessKeySecret: ${OSS_ACCESS_KEY_SECRET}
   bucketName: lining-qk
+#小程序配置
+wechat:
+  appid: ${APPID_TEST}
+  secret: ${APPSECRET_TEST}

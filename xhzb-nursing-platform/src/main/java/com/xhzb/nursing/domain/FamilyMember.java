@@ -2,8 +2,11 @@ package com.xhzb.nursing.domain;
 
 import com.xhzb.common.annotation.Excel;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import com.xhzb.common.core.domain.BaseEntity;
+import lombok.NoArgsConstructor;
 
 /**
  * 老人家属对象 family_member
@@ -12,6 +15,9 @@ import com.xhzb.common.core.domain.BaseEntity;
  * @date 2026-10-10
  */
 @Data
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 @Schema(description = "老人家属对象")
 public class FamilyMember extends BaseEntity {
     private static final long serialVersionUID = 1L;

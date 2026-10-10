@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.xhzb.nursing.domain.FamilyMember;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xhzb.nursing.domain.dto.UserLoginRequestDto;
+import com.xhzb.nursing.domain.vo.LoginVo;
 
 /**
  * 老人家属Service接口
@@ -59,4 +61,11 @@ public interface IFamilyMemberService extends IService<FamilyMember> {
      * @return 结果
      */
     public int deleteFamilyMemberById(Long id);
+
+    /**
+     * 微信登录
+     * @param userLoginRequestDto
+     * @return
+     */
+    LoginVo login(UserLoginRequestDto userLoginRequestDto);
 }

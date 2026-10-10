@@ -1,4 +1,4 @@
-package com.xhzb.nursing.controller;
+package com.xhzb.nursing.controller.member;
 
 import com.xhzb.common.core.controller.BaseController;
 import com.xhzb.common.core.domain.AjaxResult;
