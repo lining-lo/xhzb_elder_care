@@ -59,4 +59,9 @@ public interface IDeviceService extends IService<Device> {
      * @return 结果
      */
     public int deleteDeviceById(Long id);
+
+    /**
+     * 从物联网平台同步产品列表
+     */
+    void syncProductList();
 }

@@ -2,15 +2,19 @@ package com.xhzb.common.constant;
 
 /**
  * 缓存的key 常量
- * 
+ *
  * @author ruoyi
  */
-public class CacheConstants
-{
+public class CacheConstants {
     /**
      * 登录用户 redis key
      */
     public static final String LOGIN_TOKEN_KEY = "login_tokens:";
+
+    /**
+     * 产品列表 cache key
+     */
+    public static final String IOT_ALL_PRODUCT_LIST= "iot:all_product_list";
 
     /**
      * 验证码 redis key

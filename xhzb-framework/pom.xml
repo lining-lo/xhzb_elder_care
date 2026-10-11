@@ -59,6 +59,15 @@
             <artifactId>xhzb-system</artifactId>
         </dependency>
 
+        <!-- 华为云 -->
+        <dependency>
+            <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-iotda</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

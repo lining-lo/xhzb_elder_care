@@ -106,4 +106,14 @@ public class DeviceController extends BaseController {
     public AjaxResult remove(@Schema(name = "设备ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids) {
         return toAjax(deviceService.deleteDeviceByIds(ids));
     }
+
+    /**
+     * 从物联网平台同步产品列表
+     */
+    @PostMapping("/syncProductList")
+    @Operation(summary = "从物联网平台同步产品列表")
+    public AjaxResult syncProductList() {
+        deviceService.syncProductList();
+        return success();
+    }
 }

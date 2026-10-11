@@ -2,8 +2,15 @@ package com.xhzb.nursing.service.impl;
 
 import java.util.List;
 
+import cn.hutool.json.JSONUtil;
+import com.huaweicloud.sdk.iotda.v5.IoTDAClient;
+import com.huaweicloud.sdk.iotda.v5.model.ListProductsRequest;
+import com.huaweicloud.sdk.iotda.v5.model.ListProductsResponse;
+import com.xhzb.common.constant.CacheConstants;
+import com.xhzb.common.exception.base.BaseException;
 import com.xhzb.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.DeviceMapper;
 import com.xhzb.nursing.domain.Device;
@@ -22,6 +29,12 @@ import java.util.Arrays;
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> implements IDeviceService {
     @Autowired
     private DeviceMapper deviceMapper;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private IoTDAClient client;
 
     /**
      * 查询设备
@@ -87,5 +100,24 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     @Override
     public int deleteDeviceById(Long id) {
         return removeById(id) ? 1 : 0;
+    }
+
+
+    /**
+     * 同步产品列表
+     */
+    @Override
+    public void syncProductList() {
+        //请求参数
+        ListProductsRequest listProductsRequest = new ListProductsRequest();
+
+        //发起请求
+        ListProductsResponse response = client.listProducts(listProductsRequest);
+        if (response.getHttpStatusCode() != 200) {
+            throw new BaseException("物联网接口 - 查询产品，同步失败");
+        }
+        //存储到redis
+        redisTemplate.opsForValue().set(CacheConstants.IOT_ALL_PRODUCT_LIST, JSONUtil.toJsonStr(response.getProducts()));
+
     }
 }

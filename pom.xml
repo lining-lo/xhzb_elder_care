@@ -35,6 +35,7 @@
         <jsqlparser.version>4.9</jsqlparser.version>
         <spring-ai-bom.version>1.1.2</spring-ai-bom.version>
         <pdfbox.version>2.0.24</pdfbox.version>
+        <huaweicloud.sdk.version>3.1.76</huaweicloud.sdk.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -214,6 +215,18 @@
                 <groupId>org.apache.pdfbox</groupId>
                 <artifactId>pdfbox</artifactId>
                 <version>${pdfbox.version}</version>
+            </dependency>
+
+            <!-- 华为云 -->
+            <dependency>
+                <groupId>com.huaweicloud.sdk</groupId>
+                <artifactId>huaweicloud-sdk-core</artifactId>
+                <version>${huaweicloud.sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.huaweicloud.sdk</groupId>
+                <artifactId>huaweicloud-sdk-iotda</artifactId>
+                <version>${huaweicloud.sdk.version}</version>
             </dependency>
         </dependencies>
 
