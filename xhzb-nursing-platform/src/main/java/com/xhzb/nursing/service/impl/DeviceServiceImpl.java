@@ -1,16 +1,16 @@
 package com.xhzb.nursing.service.impl;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.huaweicloud.sdk.iotda.v5.IoTDAClient;
-import com.huaweicloud.sdk.iotda.v5.model.ListProductsRequest;
-import com.huaweicloud.sdk.iotda.v5.model.ListProductsResponse;
+import com.huaweicloud.sdk.iotda.v5.model.*;
 import com.xhzb.common.constant.CacheConstants;
 import com.xhzb.common.exception.base.BaseException;
 import com.xhzb.common.utils.DateUtils;
 import com.xhzb.common.utils.StringUtils;
+import com.xhzb.nursing.domain.dto.DeviceDto;
 import com.xhzb.nursing.domain.vo.ProductVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,8 +19,6 @@ import com.xhzb.nursing.mapper.DeviceMapper;
 import com.xhzb.nursing.domain.Device;
 import com.xhzb.nursing.service.IDeviceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
-import java.util.Arrays;
 
 /**
  * 设备Service业务层处理
@@ -138,5 +136,65 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         }
         //解析数据，并返回
         return JSONUtil.toList(jsonStr, ProductVo.class);
+    }
+
+    /**
+     * 注册设备
+     * @param dto
+     */
+    @Override
+    public void registerDevice(DeviceDto dto) {
+        //判断设备名称是否存在
+        Long count = this.lambdaQuery().eq(Device::getDeviceName, dto.getDeviceName()).count();
+        if(count > 0){
+            throw new BaseException("设备名称已存在，请重新输入");
+        }
+
+        //判断设备标识是否存在
+        count = this.lambdaQuery().eq(Device::getNodeId, dto.getNodeId()).count();
+        if(count > 0){
+            throw new BaseException("设备标识码已存在，请重新输入");
+        }
+
+        //判断同一位置是否绑定了相同的产品
+        count = this.lambdaQuery()
+                .eq(Device::getBindingLocation, dto.getBindingLocation())
+                .eq(Device::getLocationType, dto.getLocationType())
+                .eq(Device::getProductKey, dto.getProductKey())
+                .eq(Objects.nonNull(dto.getPhysicalLocationType()), Device::getPhysicalLocationType, dto.getPhysicalLocationType())
+                .count();
+        if(count > 0){
+            throw new BaseException("该老人/位置已绑定该产品，请重新选择");
+        }
+
+        //注册设备--->IoT平台
+        AddDeviceRequest request = new AddDeviceRequest();
+        AddDevice body = new AddDevice();
+        body.withProductId(dto.getProductKey());
+        body.withDeviceName(dto.getDeviceName());
+        body.withNodeId(dto.getNodeId());
+
+        //秘钥设置
+        AuthInfo authInfo = new AuthInfo();
+        String secret = UUID.randomUUID().toString().replaceAll("-", "");
+        authInfo.withSecret(secret);
+        body.setAuthInfo(authInfo);
+        request.setBody(body);
+
+        AddDeviceResponse response;
+        try {
+            response = client.addDevice(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException("物联网接口 - 注册设备，调用失败");
+        }
+        //本地保存设备
+        //属性拷贝
+        Device device = BeanUtil.toBean(dto, Device.class);
+        //秘钥
+        device.setSecret(secret);
+        //设备id、设备绑定状态
+        device.setIotId(response.getDeviceId());
+        save(device);
     }
 }

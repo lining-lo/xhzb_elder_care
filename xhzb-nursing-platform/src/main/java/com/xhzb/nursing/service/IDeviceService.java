@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.xhzb.nursing.domain.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xhzb.nursing.domain.dto.DeviceDto;
 import com.xhzb.nursing.domain.vo.ProductVo;
 
 /**
@@ -72,4 +73,11 @@ public interface IDeviceService extends IService<Device> {
      * @return 产品列表
      */
     List<ProductVo> allProduct();
+
+    /**
+     * 注册设备
+     * @param deviceDto
+     */
+    void registerDevice(DeviceDto deviceDto);
+
 }

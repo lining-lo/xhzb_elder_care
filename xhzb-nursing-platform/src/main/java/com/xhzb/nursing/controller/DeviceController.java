@@ -2,6 +2,7 @@ package com.xhzb.nursing.controller;
 
 import java.util.List;
 
+import com.xhzb.nursing.domain.dto.DeviceDto;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,5 +125,15 @@ public class DeviceController extends BaseController {
     @Operation(summary = "查询所有产品列表")
     public AjaxResult allProduct() {
         return success(deviceService.allProduct());
+    }
+
+    /**
+     * 注册设备
+     */
+    @PostMapping("/register")
+    @Operation(summary = "注册设备")
+    public AjaxResult registerDevice(@RequestBody DeviceDto deviceDto) {
+        deviceService.registerDevice(deviceDto);
+        return success();
     }
 }
