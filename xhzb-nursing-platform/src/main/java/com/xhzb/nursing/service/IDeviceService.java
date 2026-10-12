@@ -2,6 +2,7 @@ package com.xhzb.nursing.service;
 
 import java.util.List;
 
+import com.xhzb.common.core.domain.AjaxResult;
 import com.xhzb.nursing.domain.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xhzb.nursing.domain.dto.DeviceDto;
@@ -81,4 +82,11 @@ public interface IDeviceService extends IService<Device> {
      * @return
      */
     DeviceDetailVo queryDeviceDetail(String iotId);
+
+    /**
+     * 查询设备上报数据
+     * @param iotId
+     * @return
+     */
+    AjaxResult queryServiceProperties(String iotId);
 }

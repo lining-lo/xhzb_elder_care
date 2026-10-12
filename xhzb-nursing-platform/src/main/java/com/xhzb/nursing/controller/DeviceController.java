@@ -134,4 +134,14 @@ public class DeviceController extends BaseController {
         deviceService.registerDevice(deviceDto);
         return success();
     }
+
+    /**
+     * 查询设备上报数据
+     */
+    @GetMapping("/queryServiceProperties/{iotId}")
+    @Operation(summary = "查询设备上报数据")
+    public AjaxResult queryServiceProperties(@PathVariable("iotId") String iotId) {
+        AjaxResult ajaxResult = deviceService.queryServiceProperties(iotId);
+        return ajaxResult;
+    }
 }
