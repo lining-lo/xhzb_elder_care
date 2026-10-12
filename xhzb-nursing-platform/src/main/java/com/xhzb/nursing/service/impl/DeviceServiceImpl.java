@@ -1,5 +1,6 @@
 package com.xhzb.nursing.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import cn.hutool.json.JSONUtil;
@@ -9,6 +10,8 @@ import com.huaweicloud.sdk.iotda.v5.model.ListProductsResponse;
 import com.xhzb.common.constant.CacheConstants;
 import com.xhzb.common.exception.base.BaseException;
 import com.xhzb.common.utils.DateUtils;
+import com.xhzb.common.utils.StringUtils;
+import com.xhzb.nursing.domain.vo.ProductVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -118,6 +121,22 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         }
         //存储到redis
         redisTemplate.opsForValue().set(CacheConstants.IOT_ALL_PRODUCT_LIST, JSONUtil.toJsonStr(response.getProducts()));
+    }
 
+    /**
+     * 查询所有产品列表
+     *
+     * @return
+     */
+    @Override
+    public List<ProductVo> allProduct() {
+        //从redis中查询数据
+        String jsonStr = redisTemplate.opsForValue().get(CacheConstants.IOT_ALL_PRODUCT_LIST);
+        //如果数据为空，则返回一个空集合
+        if(StringUtils.isEmpty(jsonStr)){
+            return Collections.emptyList();
+        }
+        //解析数据，并返回
+        return JSONUtil.toList(jsonStr, ProductVo.class);
     }
 }

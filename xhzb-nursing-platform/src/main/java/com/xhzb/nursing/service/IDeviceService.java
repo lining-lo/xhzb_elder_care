@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.xhzb.nursing.domain.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xhzb.nursing.domain.vo.ProductVo;
 
 /**
  * 设备Service接口
@@ -64,4 +65,11 @@ public interface IDeviceService extends IService<Device> {
      * 从物联网平台同步产品列表
      */
     void syncProductList();
+
+    /**
+     * 查询所有产品列表
+     *
+     * @return 产品列表
+     */
+    List<ProductVo> allProduct();
 }

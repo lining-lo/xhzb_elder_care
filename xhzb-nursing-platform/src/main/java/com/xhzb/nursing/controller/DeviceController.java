@@ -116,4 +116,13 @@ public class DeviceController extends BaseController {
         deviceService.syncProductList();
         return success();
     }
+
+    /**
+     * 查询所有产品列表
+     */
+    @GetMapping("/allProduct")
+    @Operation(summary = "查询所有产品列表")
+    public AjaxResult allProduct() {
+        return success(deviceService.allProduct());
+    }
 }
