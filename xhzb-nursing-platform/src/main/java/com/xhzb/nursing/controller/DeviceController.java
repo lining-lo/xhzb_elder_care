@@ -67,12 +67,10 @@ public class DeviceController extends BaseController {
     /**
      * 获取设备详细信息
      */
-    @PreAuthorize("@ss.hasPermi('nursing:device:query')")
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{iotId}")
     @Operation(summary = "获取设备详细信息")
-    public AjaxResult getInfo(@Schema(name = "设备ID", requiredMode = Schema.RequiredMode.REQUIRED)
-                              @PathVariable("id") Long id) {
-        return success(deviceService.selectDeviceById(id));
+    public AjaxResult getInfo(@PathVariable("iotId") String iotId) {
+        return success(deviceService.queryDeviceDetail(iotId));
     }
 
     /**

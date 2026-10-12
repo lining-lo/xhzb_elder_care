@@ -5,6 +5,7 @@ import java.util.List;
 import com.xhzb.nursing.domain.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xhzb.nursing.domain.dto.DeviceDto;
+import com.xhzb.nursing.domain.vo.DeviceDetailVo;
 import com.xhzb.nursing.domain.vo.ProductVo;
 
 /**
@@ -14,13 +15,6 @@ import com.xhzb.nursing.domain.vo.ProductVo;
  * @date 2026-10-11
  */
 public interface IDeviceService extends IService<Device> {
-    /**
-     * 查询设备
-     *
-     * @param id 设备主键
-     * @return 设备
-     */
-    public Device selectDeviceById(Long id);
 
     /**
      * 查询设备列表
@@ -80,4 +74,11 @@ public interface IDeviceService extends IService<Device> {
      */
     void registerDevice(DeviceDto deviceDto);
 
+
+    /**
+     * 查询设备详情
+     * @param iotId
+     * @return
+     */
+    DeviceDetailVo queryDeviceDetail(String iotId);
 }

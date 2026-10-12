@@ -1,8 +1,12 @@
 package com.xhzb.nursing.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.huaweicloud.sdk.iotda.v5.IoTDAClient;
 import com.huaweicloud.sdk.iotda.v5.model.*;
@@ -11,7 +15,9 @@ import com.xhzb.common.exception.base.BaseException;
 import com.xhzb.common.utils.DateUtils;
 import com.xhzb.common.utils.StringUtils;
 import com.xhzb.nursing.domain.dto.DeviceDto;
+import com.xhzb.nursing.domain.vo.DeviceDetailVo;
 import com.xhzb.nursing.domain.vo.ProductVo;
+import com.xhzb.nursing.util.DateTimeZoneConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -38,14 +44,39 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private IoTDAClient client;
 
     /**
-     * 查询设备
-     *
-     * @param id 设备主键
-     * @return 设备
+     * 查询设备详情
+     * @param iotId
+     * @return
      */
     @Override
-    public Device selectDeviceById(Long id) {
-        return getById(id);
+    public DeviceDetailVo queryDeviceDetail(String iotId) {
+        //查询本地设备数据
+        Device device = this.lambdaQuery().eq(Device::getIotId, iotId).one();
+        if(ObjectUtil.isEmpty(device)){
+            return null;
+        }
+        //调用华为云接口查询设备详情
+        ShowDeviceRequest request = new ShowDeviceRequest();
+        request.setDeviceId(iotId);
+        ShowDeviceResponse response;
+        try {
+            response = client.showDevice(request);
+        } catch (Exception e) {
+            throw new BaseException("物联网接口 - 查询设备详情，调用失败");
+        }
+        //属性拷贝
+        DeviceDetailVo deviceVo = BeanUtil.toBean(device, DeviceDetailVo.class);
+        deviceVo.setDeviceStatus(response.getStatus());
+        String activeTimeStr = response.getActiveTime();
+        //日期转换
+        if(StringUtils.isNotEmpty(activeTimeStr)){
+            //把字符串转换为LocalDateTime
+            LocalDateTime activeTime = LocalDateTimeUtil.parse(activeTimeStr, DatePattern.UTC_MS_PATTERN);
+            //日期时区转换
+            deviceVo.setActiveTime(DateTimeZoneConverter.utcToShanghai(activeTime));
+        }
+
+        return deviceVo;
     }
 
     /**
