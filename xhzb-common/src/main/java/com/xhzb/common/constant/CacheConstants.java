@@ -6,6 +6,12 @@ package com.xhzb.common.constant;
  * @author ruoyi
  */
 public class CacheConstants {
+
+    /**
+     * 设备数据 cache key
+     */
+    public static final String IOT_DEVICE_LAST_DATA = "iot:device_last_data";
+
     /**
      * 登录用户 redis key
      */

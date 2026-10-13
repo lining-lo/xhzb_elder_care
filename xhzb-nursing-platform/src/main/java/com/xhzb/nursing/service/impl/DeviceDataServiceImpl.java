@@ -8,6 +8,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
+import com.xhzb.common.constant.CacheConstants;
 import com.xhzb.common.utils.DateUtils;
 import com.xhzb.nursing.domain.Device;
 import com.xhzb.nursing.domain.IotMsgNotifyData;
@@ -15,6 +17,7 @@ import com.xhzb.nursing.mapper.DeviceMapper;
 import com.xhzb.nursing.service.IDeviceService;
 import com.xhzb.nursing.util.DateTimeZoneConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.DeviceDataMapper;
 import com.xhzb.nursing.domain.DeviceData;
@@ -37,6 +40,9 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
 
     @Autowired
     private IDeviceService deviceService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 查询设备数据
@@ -145,6 +151,7 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
             });
             //批量保存设备数据
             saveBatch(list);
+            redisTemplate.opsForHash().put(CacheConstants.IOT_DEVICE_LAST_DATA, iotId, JSONUtil.toJsonStr(list));
         });
 
     }

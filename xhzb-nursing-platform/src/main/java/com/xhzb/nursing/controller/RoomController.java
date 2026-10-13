@@ -110,4 +110,12 @@ public class RoomController extends BaseController {
         RoomVo roomVo = roomService.getRoomById(id);
         return R.ok(roomVo);
     }
+
+    /**
+     * 获取房间中的智能设备及数据
+     */
+    @GetMapping("/getRoomsWithDeviceByFloorId/{floorId}")
+    public R<List<RoomVo>> getRoomsWithDeviceByFloorId(@PathVariable(name = "floorId") Long floorId){
+        return R.ok(roomService.getRoomsWithDeviceByFloorId(floorId));
+    }
 }
