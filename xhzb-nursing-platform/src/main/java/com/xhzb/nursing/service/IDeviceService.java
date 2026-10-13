@@ -89,4 +89,11 @@ public interface IDeviceService extends IService<Device> {
      * @return
      */
     AjaxResult queryServiceProperties(String iotId);
+
+    /**
+     * 查询产品详情
+     * @param productKey
+     * @return
+     */
+    AjaxResult queryProduct(String productKey);
 }

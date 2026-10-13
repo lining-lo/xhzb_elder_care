@@ -32,7 +32,7 @@ import com.xhzb.common.core.page.TableDataInfo;
  * @date 2026-10-13
  */
 @RestController
-@RequestMapping("/nursing/alertRule")
+@RequestMapping("/nursing/alertData")
 @Tag(name = "报警数据相关接口")
 public class AlertDataController extends BaseController {
     @Autowired

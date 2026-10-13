@@ -1,6 +1,7 @@
 package com.xhzb.nursing.controller;
 
 import java.util.List;
+
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,14 @@ import com.xhzb.common.core.page.TableDataInfo;
 
 /**
  * 报警规则Controller
- * 
+ *
  * @author ruoyi
  * @date 2026-10-13
  */
 @RestController
 @RequestMapping("/nursing/alertRule")
 @Tag(name = "报警规则相关接口")
-public class AlertRuleController extends BaseController
-{
+public class AlertRuleController extends BaseController {
     @Autowired
     private IAlertRuleService alertRuleService;
 
@@ -44,8 +44,7 @@ public class AlertRuleController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:alertRule:list')")
     @GetMapping("/list")
     @Operation(summary = "查询报警规则列表")
-    public TableDataInfo list(AlertRule alertRule)
-    {
+    public TableDataInfo list(AlertRule alertRule) {
         startPage();
         List<AlertRule> list = alertRuleService.selectAlertRuleList(alertRule);
         return getDataTable(list);
@@ -58,8 +57,7 @@ public class AlertRuleController extends BaseController
     @Log(title = "报警规则", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @Operation(summary = "导出报警规则列表")
-    public void export(HttpServletResponse response, AlertRule alertRule)
-    {
+    public void export(HttpServletResponse response, AlertRule alertRule) {
         List<AlertRule> list = alertRuleService.selectAlertRuleList(alertRule);
         ExcelUtil<AlertRule> util = new ExcelUtil<AlertRule>(AlertRule.class);
         util.exportExcel(response, list, "报警规则数据");
@@ -72,8 +70,7 @@ public class AlertRuleController extends BaseController
     @GetMapping(value = "/{id}")
     @Operation(summary = "获取报警规则详细信息")
     public AjaxResult getInfo(@Schema(name = "报警规则ID", requiredMode = Schema.RequiredMode.REQUIRED)
-            @PathVariable("id") Long id)
-    {
+                              @PathVariable("id") Long id) {
         return success(alertRuleService.selectAlertRuleById(id));
     }
 
@@ -84,8 +81,7 @@ public class AlertRuleController extends BaseController
     @Log(title = "报警规则", businessType = BusinessType.INSERT)
     @PostMapping
     @Operation(summary = "新增报警规则")
-    public AjaxResult add(@RequestBody AlertRule alertRule)
-    {
+    public AjaxResult add(@RequestBody AlertRule alertRule) {
         return toAjax(alertRuleService.insertAlertRule(alertRule));
     }
 
@@ -96,8 +92,7 @@ public class AlertRuleController extends BaseController
     @Log(title = "报警规则", businessType = BusinessType.UPDATE)
     @PutMapping
     @Operation(summary = "修改报警规则")
-    public AjaxResult edit(@RequestBody AlertRule alertRule)
-    {
+    public AjaxResult edit(@RequestBody AlertRule alertRule) {
         return toAjax(alertRuleService.updateAlertRule(alertRule));
     }
 
@@ -106,10 +101,11 @@ public class AlertRuleController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('nursing:alertRule:remove')")
     @Log(title = "报警规则", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     @Operation(summary = "删除报警规则")
-    public AjaxResult remove(@Schema(name = "报警规则ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids)
-    {
+    public AjaxResult remove(@Schema(name = "报警规则ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids) {
         return toAjax(alertRuleService.deleteAlertRuleByIds(ids));
     }
+
+    
 }

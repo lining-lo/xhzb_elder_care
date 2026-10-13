@@ -144,4 +144,13 @@ public class DeviceController extends BaseController {
         AjaxResult ajaxResult = deviceService.queryServiceProperties(iotId);
         return ajaxResult;
     }
+
+    /**
+     * 查询产品详情
+     */
+    @GetMapping("/queryProduct/{productKey}")
+    @Operation(summary = "查询产品详情")
+    public AjaxResult queryProduct(@PathVariable String productKey){
+        return deviceService.queryProduct(productKey);
+    }
 }
