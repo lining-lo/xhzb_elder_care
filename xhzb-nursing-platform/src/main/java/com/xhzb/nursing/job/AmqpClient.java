@@ -1,7 +1,12 @@
 package com.xhzb.nursing.job;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.xhzb.framework.config.properties.HuaWeiIotConfigProperties;
+import com.xhzb.nursing.domain.IotMsgNotifyData;
+import com.xhzb.nursing.service.IDeviceDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.qpid.jms.*;
 import org.apache.qpid.jms.message.JmsInboundMessageDispatch;
@@ -36,6 +41,9 @@ public class AmqpClient implements ApplicationRunner {
     //业务处理异步线程池，线程池参数可以根据您的业务特点调整，或者您也可以用其他异步方式处理接收到的消息。
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Autowired
+    private IDeviceDataService deviceDataService;
 
     //控制台服务端订阅中消费组状态页客户端ID一栏将显示clientId参数。
     //建议使用机器UUID、MAC地址、IP等唯一标识等作为clientId。便于您区分识别不同的客户端。
@@ -173,6 +181,7 @@ public class AmqpClient implements ApplicationRunner {
         }
     };
 
+
     /**
      * 在这里处理您收到消息后的具体业务逻辑。
      */
@@ -186,6 +195,23 @@ public class AmqpClient implements ApplicationRunner {
         } catch (JMSException e) {
             throw new RuntimeException("服务器错误");
         }
+
+        //将消息转换为json格式，数据为空，直接返回
+        JSONObject jsonMsg = JSONUtil.parseObj(contentStr);
+
+        //取出消息中的notify_data字段，数据为空，直接返回
+        JSONObject jsonNotifyData = jsonMsg.getJSONObject("notify_data");
+        if (ObjectUtil.isEmpty(jsonMsg)) {
+            return;
+        }
+
+        //json格式转换为对象，如果属性上报为空，程序结束
+        IotMsgNotifyData iotMsgNotifyData = JSONUtil.toBean(jsonNotifyData, IotMsgNotifyData.class);
+        if (ObjectUtil.isEmpty(iotMsgNotifyData.getBody()) || ObjectUtil.isEmpty(iotMsgNotifyData.getBody().getServices())) {
+            return;
+        }
+
+        deviceDataService.batchInsertDeviceData(iotMsgNotifyData);
 
     }
 

@@ -1,20 +1,21 @@
 package com.xhzb.nursing.service;
 
 import java.util.List;
+
 import com.xhzb.nursing.domain.DeviceData;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xhzb.nursing.domain.IotMsgNotifyData;
 
 /**
  * 设备数据Service接口
- * 
+ *
  * @author ruoyi
  * @date 2026-10-12
  */
-public interface IDeviceDataService extends IService<DeviceData>
-{
+public interface IDeviceDataService extends IService<DeviceData> {
     /**
      * 查询设备数据
-     * 
+     *
      * @param id 设备数据主键
      * @return 设备数据
      */
@@ -22,7 +23,7 @@ public interface IDeviceDataService extends IService<DeviceData>
 
     /**
      * 查询设备数据列表
-     * 
+     *
      * @param deviceData 设备数据
      * @return 设备数据集合
      */
@@ -30,7 +31,7 @@ public interface IDeviceDataService extends IService<DeviceData>
 
     /**
      * 新增设备数据
-     * 
+     *
      * @param deviceData 设备数据
      * @return 结果
      */
@@ -38,7 +39,7 @@ public interface IDeviceDataService extends IService<DeviceData>
 
     /**
      * 修改设备数据
-     * 
+     *
      * @param deviceData 设备数据
      * @return 结果
      */
@@ -46,7 +47,7 @@ public interface IDeviceDataService extends IService<DeviceData>
 
     /**
      * 批量删除设备数据
-     * 
+     *
      * @param ids 需要删除的设备数据主键集合
      * @return 结果
      */
@@ -54,9 +55,15 @@ public interface IDeviceDataService extends IService<DeviceData>
 
     /**
      * 删除设备数据信息
-     * 
+     *
      * @param id 设备数据主键
      * @return 结果
      */
     public int deleteDeviceDataById(Long id);
+
+    /**
+     * 批量保存数据
+     * @param iotMsgNotifyData
+     */
+    void batchInsertDeviceData(IotMsgNotifyData iotMsgNotifyData);
 }
