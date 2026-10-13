@@ -73,4 +73,10 @@ public interface FloorMapper extends BaseMapper<Floor>
      * @return
      */
     List<TreeVo> getRoomAndBedByBedStatus(Integer status);
+
+    /**
+     * 查询智能楼层
+     * @return
+     */
+    List<FloorVo> getAllFloorsWithDevice();
 }

@@ -1,6 +1,7 @@
 package com.xhzb.nursing.controller;
 
 import java.util.List;
+
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,14 @@ import com.xhzb.common.core.page.TableDataInfo;
 
 /**
  * 设备数据Controller
- * 
+ *
  * @author ruoyi
  * @date 2026-10-12
  */
 @RestController
 @RequestMapping("/nursing/data")
 @Tag(name = "设备数据相关接口")
-public class DeviceDataController extends BaseController
-{
+public class DeviceDataController extends BaseController {
     @Autowired
     private IDeviceDataService deviceDataService;
 
@@ -44,8 +44,7 @@ public class DeviceDataController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:data:list')")
     @GetMapping("/list")
     @Operation(summary = "查询设备数据列表")
-    public TableDataInfo list(DeviceData deviceData)
-    {
+    public TableDataInfo list(DeviceData deviceData) {
         startPage();
         List<DeviceData> list = deviceDataService.selectDeviceDataList(deviceData);
         return getDataTable(list);
@@ -58,8 +57,7 @@ public class DeviceDataController extends BaseController
     @Log(title = "设备数据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @Operation(summary = "导出设备数据列表")
-    public void export(HttpServletResponse response, DeviceData deviceData)
-    {
+    public void export(HttpServletResponse response, DeviceData deviceData) {
         List<DeviceData> list = deviceDataService.selectDeviceDataList(deviceData);
         ExcelUtil<DeviceData> util = new ExcelUtil<DeviceData>(DeviceData.class);
         util.exportExcel(response, list, "设备数据数据");
@@ -72,8 +70,7 @@ public class DeviceDataController extends BaseController
     @GetMapping(value = "/{id}")
     @Operation(summary = "获取设备数据详细信息")
     public AjaxResult getInfo(@Schema(name = "设备数据ID", requiredMode = Schema.RequiredMode.REQUIRED)
-            @PathVariable("id") Long id)
-    {
+                              @PathVariable("id") Long id) {
         return success(deviceDataService.selectDeviceDataById(id));
     }
 
@@ -84,8 +81,7 @@ public class DeviceDataController extends BaseController
     @Log(title = "设备数据", businessType = BusinessType.INSERT)
     @PostMapping
     @Operation(summary = "新增设备数据")
-    public AjaxResult add(@RequestBody DeviceData deviceData)
-    {
+    public AjaxResult add(@RequestBody DeviceData deviceData) {
         return toAjax(deviceDataService.insertDeviceData(deviceData));
     }
 
@@ -96,8 +92,7 @@ public class DeviceDataController extends BaseController
     @Log(title = "设备数据", businessType = BusinessType.UPDATE)
     @PutMapping
     @Operation(summary = "修改设备数据")
-    public AjaxResult edit(@RequestBody DeviceData deviceData)
-    {
+    public AjaxResult edit(@RequestBody DeviceData deviceData) {
         return toAjax(deviceDataService.updateDeviceData(deviceData));
     }
 
@@ -106,10 +101,9 @@ public class DeviceDataController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('nursing:data:remove')")
     @Log(title = "设备数据", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     @Operation(summary = "删除设备数据")
-    public AjaxResult remove(@Schema(name = "设备数据ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids)
-    {
+    public AjaxResult remove(@Schema(name = "设备数据ID", requiredMode = Schema.RequiredMode.REQUIRED) @PathVariable Long[] ids) {
         return toAjax(deviceDataService.deleteDeviceDataByIds(ids));
     }
 }

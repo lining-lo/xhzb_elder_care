@@ -103,4 +103,13 @@ public class FloorServiceImpl extends ServiceImpl<FloorMapper, Floor> implements
     public List<TreeVo> getRoomAndBedByBedStatus(Integer status) {
         return floorMapper.getRoomAndBedByBedStatus(status);
     }
+
+    /**
+     * 查询智能楼层
+     * @return
+     */
+    @Override
+    public List<FloorVo> getAllFloorsWithDevice() {
+        return floorMapper.getAllFloorsWithDevice();
+    }
 }

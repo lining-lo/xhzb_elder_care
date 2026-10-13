@@ -96,8 +96,17 @@ public class FloorController extends BaseController {
      * 根据床位状态查询所有楼层数据
      */
     @GetMapping("/getRoomAndBedByBedStatus/{status}")
-    public AjaxResult getRoomAndBedByBedStatus(@PathVariable Integer status){
+    public AjaxResult getRoomAndBedByBedStatus(@PathVariable Integer status) {
         List<TreeVo> list = floorService.getRoomAndBedByBedStatus(status);
         return success(list);
+    }
+
+
+    /**
+     * 查询智能楼层
+     */
+    @GetMapping("/getAllFloorsWithDevice")
+    public AjaxResult getAllFloorWithDevice(){
+        return success(floorService.getAllFloorsWithDevice());
     }
 }

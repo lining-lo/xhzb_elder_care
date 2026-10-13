@@ -67,4 +67,10 @@ public interface IFloorService extends IService<Floor>
      * 根据床位状态查询所有楼层数据
      */
     List<TreeVo> getRoomAndBedByBedStatus(Integer status);
+
+    /**
+     * 查询智能楼层
+     * @return
+     */
+    List<FloorVo> getAllFloorsWithDevice();
 }
