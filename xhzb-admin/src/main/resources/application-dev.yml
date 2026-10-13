@@ -105,5 +105,5 @@ huaweicloud:
   #amqp相关配置 接收设备数据使用
   host: 126b8783f4.st1.iotda-app.cn-east-3.myhuaweicloud.com
   accessKey: Vskizss5
-  accessCode: yzVkjZO7DlbWDpd7BD7MLpPcs004D6pj
+  accessCode: AlXfljeicbfZAXFyawyqWKOpXpDtWz0e
   queueName: DefaultQueue   #默认无需改动
