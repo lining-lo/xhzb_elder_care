@@ -123,4 +123,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectLatestPropertyList" resultType="com.xhzb.nursing.domain.vo.DeviceServicePropertyVo">
+        select function_id functionId, alarm_time eventTime, data_value value
+        from device_data
+        where iot_id = #{iotId}
+        and id in (select max(id) from device_data where iot_id = #{iotId} group by function_id)
+        order by function_id
+    </select>
+
+    <select id="selectHourAvgList" resultType="com.xhzb.nursing.domain.vo.DeviceDataTrendVo">
+        select date_format(alarm_time, '%H:00') dateTime,
+        round(avg(cast(data_value as decimal(12, 4))), 1) dataValue
+        from device_data
+        where iot_id = #{iotId} and function_id = #{functionId}
+        and alarm_time &gt;= #{startTime} and alarm_time &lt; #{endTime}
+        and data_value regexp '^-?[0-9]+(\\.[0-9]+)?$'
+        group by date_format(alarm_time, '%H:00')
+        order by dateTime
+    </select>
+
+    <select id="selectDayAvgList" resultType="com.xhzb.nursing.domain.vo.DeviceDataTrendVo">
+        select date_format(date(alarm_time), '%m.%d') dateTime,
+        round(avg(cast(data_value as decimal(12, 4))), 1) dataValue
+        from device_data
+        where iot_id = #{iotId} and function_id = #{functionId}
+        and alarm_time &gt;= #{startTime} and alarm_time &lt; #{endTime}
+        and data_value regexp '^-?[0-9]+(\\.[0-9]+)?$'
+        group by date_format(date(alarm_time), '%m.%d')
+        order by min(alarm_time)
+    </select>
 </mapper>

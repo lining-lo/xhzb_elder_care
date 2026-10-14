@@ -1,9 +1,13 @@
 package com.xhzb.nursing.mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xhzb.nursing.domain.DeviceData;
+import com.xhzb.nursing.domain.vo.DeviceDataTrendVo;
+import com.xhzb.nursing.domain.vo.DeviceServicePropertyVo;
 
 /**
  * 设备数据Mapper接口
@@ -61,4 +65,36 @@ public interface DeviceDataMapper extends BaseMapper<DeviceData>
      * @return 结果
      */
     public int deleteDeviceDataByIds(Long[] ids);
+
+    /**
+     * 查询设备每个功能最新上报的数据
+     *
+     * @param iotId 设备ID
+     * @return 设备最新上报数据
+     */
+    public List<DeviceServicePropertyVo> selectLatestPropertyList(@Param("iotId") String iotId);
+
+    /**
+     * 按小时统计设备指标数据
+     *
+     * @param iotId 设备ID
+     * @param functionId 功能ID
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 统计数据
+     */
+    public List<DeviceDataTrendVo> selectHourAvgList(@Param("iotId") String iotId, @Param("functionId") String functionId,
+                                                     @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
+
+    /**
+     * 按天统计设备指标数据
+     *
+     * @param iotId 设备ID
+     * @param functionId 功能ID
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 统计数据
+     */
+    public List<DeviceDataTrendVo> selectDayAvgList(@Param("iotId") String iotId, @Param("functionId") String functionId,
+                                                    @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 }
