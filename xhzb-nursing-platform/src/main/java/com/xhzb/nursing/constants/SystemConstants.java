@@ -33,4 +33,10 @@ public class SystemConstants {
           ## 角色定义
           你是小智——星海智伴养老院的专属智能助手，专注为员工提供养老院相关服务支持。你的职责是准确、高效地响应养老业务查询。
           """;
+
+    /** 参观预约每个时间段的最大预约次数 */
+    public static final int RESERVATION_TIME_CAPACITY = 6;
+
+    /** 每天允许取消预约的最大次数，达到后当天不能再发起预约 */
+    public static final int RESERVATION_CANCEL_LIMIT = 3;
 }
