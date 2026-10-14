@@ -48,6 +48,10 @@ public class ResourcesConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(repeatSubmitInterceptor).addPathPatterns("/**");
+        /**
+         * 小程序端需要获取当前登录用户信息的接口（预约相关接口），登录接口与房型接口属于免登录接口，不在此处拦截
+         */
+        registry.addInterceptor(membersInterceptor).addPathPatterns("/member/reservation/**");
     }
 
     /**
