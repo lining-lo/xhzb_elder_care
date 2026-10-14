@@ -182,4 +182,17 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectNursingIdsByElderId" resultType="java.lang.Long">
+        select nursing_id from nursing_elder where elder_id = #{elderId}
+    </select>
+
+    <select id="selectNursingIdsByBedId" resultType="java.lang.Long">
+        select
+            ne.nursing_id
+        from nursing_elder ne
+                 left join elder e on ne.elder_id = e.id
+                 left join bed b on e.bed_id = b.id
+        where b.id = #{bedId}
+    </select>
 </mapper>

@@ -41,4 +41,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	        #{userId}
             </foreach> 
 	</delete>
+
+	<select id="selectUserIdsByRoleName" resultType="java.lang.Long">
+		select sur.user_id
+		from sys_user_role sur
+				 left join sys_role sr on sr.role_id=sur.role_id
+		where sr.role_name=#{roleName}
+	</select>
 </mapper> 

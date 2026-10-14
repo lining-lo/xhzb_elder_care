@@ -61,4 +61,19 @@ public interface AlertRuleMapper extends BaseMapper<AlertRule> {
      * @return 结果
      */
     public int deleteAlertRuleByIds(Long[] ids);
+
+    /**
+     *根据老人ID，找到老人的护理人员ID
+     * @param elderId
+     * @return
+     */
+    public List<Long> selectNursingIdsByElderId(Long elderId);
+
+
+    /**
+     *根据床位ID，找到老人的护理人员ID
+     * @param bedId
+     * @return
+     */
+    public List<Long> selectNursingIdsByBedId(Long bedId);
 }

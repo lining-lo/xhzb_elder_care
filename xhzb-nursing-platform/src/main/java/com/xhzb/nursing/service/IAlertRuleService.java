@@ -59,4 +59,9 @@ public interface IAlertRuleService extends IService<AlertRule> {
      * @return 结果
      */
     public int deleteAlertRuleById(Long id);
+
+    /**
+     * 过滤报警
+     */
+    void alertRuleFilter();
 }
