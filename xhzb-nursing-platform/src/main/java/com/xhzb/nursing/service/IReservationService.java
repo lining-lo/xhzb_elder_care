@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xhzb.nursing.domain.Reservation;
+import com.xhzb.nursing.domain.dto.ReservationQueryDto;
 import com.xhzb.nursing.domain.vo.ReservationTimeCountVo;
 
 /**
@@ -60,4 +61,36 @@ public interface IReservationService extends IService<Reservation>
      * @return 时间段剩余预约次数
      */
     public List<ReservationTimeCountVo> selectTimeCountList(Long time);
+
+    /**
+     * 查询预约信息列表（管理端）
+     *
+     * @param query 查询条件
+     * @return 预约信息集合
+     */
+    public List<Reservation> selectAdminReservationList(ReservationQueryDto query);
+
+    /**
+     * 管理端新增预约
+     *
+     * @param reservation 预约信息
+     * @return 结果
+     */
+    public int createReservation(Reservation reservation);
+
+    /**
+     * 管理端修改预约（含到院：状态改为已完成并记录到院时间）
+     *
+     * @param reservation 预约信息
+     * @return 结果
+     */
+    public int modifyReservation(Reservation reservation);
+
+    /**
+     * 批量删除预约
+     *
+     * @param ids 需要删除的预约主键集合
+     * @return 结果
+     */
+    public int removeReservationByIds(Long[] ids);
 }

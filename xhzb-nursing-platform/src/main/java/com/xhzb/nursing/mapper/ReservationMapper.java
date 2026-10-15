@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xhzb.nursing.domain.Reservation;
+import com.xhzb.nursing.domain.dto.ReservationQueryDto;
 import com.xhzb.nursing.domain.vo.ReservationTimeCountVo;
 
 /**
@@ -19,6 +20,14 @@ import com.xhzb.nursing.domain.vo.ReservationTimeCountVo;
 @Mapper
 public interface ReservationMapper extends BaseMapper<Reservation>
 {
+    /**
+     * 查询预约信息列表（管理端，支持预约时间范围）
+     *
+     * @param query 查询条件
+     * @return 预约信息集合
+     */
+    public List<Reservation> selectAdminReservationList(ReservationQueryDto query);
+
     /**
      * 查询预约信息列表
      *

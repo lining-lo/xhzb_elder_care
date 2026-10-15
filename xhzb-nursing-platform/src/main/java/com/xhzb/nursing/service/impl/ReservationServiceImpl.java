@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,9 +14,11 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xhzb.common.exception.ServiceException;
+import com.xhzb.common.utils.StringUtils;
 import com.xhzb.common.utils.UserThreadLocal;
 import com.xhzb.nursing.constants.SystemConstants;
 import com.xhzb.nursing.domain.Reservation;
+import com.xhzb.nursing.domain.dto.ReservationQueryDto;
 import com.xhzb.nursing.domain.vo.ReservationTimeCountVo;
 import com.xhzb.nursing.mapper.ReservationMapper;
 import com.xhzb.nursing.service.IReservationService;
@@ -101,6 +104,7 @@ public class ReservationServiceImpl extends ServiceImpl<ReservationMapper, Reser
         reservation.setType(type);
         reservation.setStatus(STATUS_WAIT);
         reservation.setCreateBy(String.valueOf(userId));
+        reservation.setFamilyMemberId(userId);
         return save(reservation) ? 1 : 0;
     }
 
@@ -120,7 +124,7 @@ public class ReservationServiceImpl extends ServiceImpl<ReservationMapper, Reser
         }
 
         Long userId = currentUserId();
-        if (!String.valueOf(userId).equals(reservation.getCreateBy()))
+        if (!Objects.equals(userId, reservation.getFamilyMemberId()))
         {
             throw new ServiceException("只能取消本人的预约");
         }
@@ -171,7 +175,7 @@ public class ReservationServiceImpl extends ServiceImpl<ReservationMapper, Reser
     {
         LocalDateTime startTime = LocalDate.now().atStartOfDay();
         Long count = reservationMapper.selectCount(Wrappers.<Reservation>lambdaQuery()
-                .eq(Reservation::getCreateBy, String.valueOf(userId))
+                .eq(Reservation::getFamilyMemberId, userId)
                 .eq(Reservation::getStatus, STATUS_CANCELLED)
                 .ge(Reservation::getUpdateTime, startTime)
                 .lt(Reservation::getUpdateTime, startTime.plusDays(1)));
@@ -206,5 +210,83 @@ public class ReservationServiceImpl extends ServiceImpl<ReservationMapper, Reser
             throw new ServiceException("认证失败");
         }
         return userId;
+    }
+
+    /**
+     * 查询预约信息列表（管理端）
+     *
+     * @param query 查询条件
+     * @return 预约信息集合
+     */
+    @Override
+    public List<Reservation> selectAdminReservationList(ReservationQueryDto query)
+    {
+        return reservationMapper.selectAdminReservationList(query);
+    }
+
+    /**
+     * 管理端新增预约
+     *
+     * @param reservation 预约信息
+     * @return 结果
+     */
+    @Override
+    public int createReservation(Reservation reservation)
+    {
+        if (StringUtils.isEmpty(reservation.getName()) || StringUtils.isEmpty(reservation.getMobile()))
+        {
+            throw new ServiceException("预约人姓名与手机号不能为空");
+        }
+        if (Objects.isNull(reservation.getTime()))
+        {
+            throw new ServiceException("预约时间不能为空");
+        }
+        // 后台登记时预约类型与状态都允许为空，这里给出默认值
+        if (Objects.isNull(reservation.getType()))
+        {
+            reservation.setType(TYPE_VISIT);
+        }
+        if (Objects.isNull(reservation.getStatus()))
+        {
+            reservation.setStatus(STATUS_WAIT);
+        }
+        reservation.setId(null);
+        return save(reservation) ? 1 : 0;
+    }
+
+    /**
+     * 管理端修改预约（含到院：状态改为已完成并记录到院时间）
+     *
+     * @param reservation 预约信息
+     * @return 结果
+     */
+    @Override
+    public int modifyReservation(Reservation reservation)
+    {
+        if (Objects.isNull(reservation.getId()))
+        {
+            throw new ServiceException("预约信息ID不能为空");
+        }
+        if (Objects.isNull(getById(reservation.getId())))
+        {
+            throw new ServiceException("预约信息不存在");
+        }
+        return updateById(reservation) ? 1 : 0;
+    }
+
+    /**
+     * 批量删除预约
+     *
+     * @param ids 需要删除的预约主键集合
+     * @return 结果
+     */
+    @Override
+    public int removeReservationByIds(Long[] ids)
+    {
+        if (Objects.isNull(ids) || ids.length == 0)
+        {
+            throw new ServiceException("请选择需要删除的预约");
+        }
+        return removeByIds(Arrays.asList(ids)) ? 1 : 0;
     }
 }
