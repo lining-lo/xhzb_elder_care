@@ -117,8 +117,8 @@
         <el-form-item label="预约时间" prop="time">
           <el-date-picker clearable
             v-model="form.time"
-            type="date"
-            value-format="YYYY-MM-DD"
+            type="datetime"
+            value-format="YYYY-MM-DD HH:mm:ss"
             placeholder="请选择预约时间">
           </el-date-picker>
         </el-form-item>
@@ -304,6 +304,7 @@ function handleUpdate(row) {
   const _id = row.id || ids.value
   getReservation(_id).then(response => {
     form.value = response.data
+    form.value.time = proxy.parseTime(response.data.time, '{y}-{m}-{d} {h}:{i}:{s}')
     open.value = true
     title.value = "修改预约信息"
   })
