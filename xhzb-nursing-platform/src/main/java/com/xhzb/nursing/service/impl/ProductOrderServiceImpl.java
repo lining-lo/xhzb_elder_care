@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import cn.hutool.json.JSONUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +70,10 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
     private static final Integer TASK_TYPE_OUTER = 1;
 
     private static final DateTimeFormatter ORDER_NO_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+    /** 是否使用模拟支付（下单后直接置为已支付，演示用） */
+    @Value("${pay.mock:true}")
+    private boolean payMock;
 
     @Autowired
     private ProductOrderMapper productOrderMapper;
@@ -139,6 +144,12 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
         order.setRemark(toStr(body.get("remark")));
         order.setCreateBy(String.valueOf(currentUserId()));
         save(order);
+
+        // 模拟支付：下单后直接置为待执行并生成计划外护理任务；关闭 pay.mock 后需等待支付回调
+        if (payMock)
+        {
+            payNotify(order.getId());
+        }
 
         MemberOrderVo orderVo = productOrderMapper.selectMemberOrderById(order.getId());
         orderVo.setTradingVo(buildTradingVo(order.getOrderNo(), order.getAmount()));

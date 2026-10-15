@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +68,10 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements IB
 
     /** 每月按 30 天折算 */
     private static final BigDecimal MONTH_DAYS = new BigDecimal("30");
+
+    /** 是否使用模拟支付（账单支付后直接置为已支付，演示用） */
+    @Value("${pay.mock:true}")
+    private boolean payMock;
 
     @Autowired
     private BillMapper billMapper;
@@ -129,6 +134,12 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements IB
         {
             throw new ServiceException("当前账单不需要支付");
         }
+        // 模拟支付：直接置为已支付；关闭 pay.mock 后需等待支付回调
+        if (payMock)
+        {
+            payNotify(id);
+        }
+
         Map<String, Object> payParams = new LinkedHashMap<>();
         payParams.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
         payParams.put("nonceStr", bill.getBillNo());
