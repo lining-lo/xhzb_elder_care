@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="432" viewBox="0 0 1200 432" role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">星海智伴 · 智慧养老护理平台</title>
+  <desc id="heroDesc">星海智伴：面向养老院的一体化管理平台。左侧为项目名称与一句话说明，说明管理后台与家属端小程序共用一套后端，护理任务、账单与异常报警由系统自动生成；右侧为智能床位功能的结构示意图（楼层、房间、床位与设备，含在住/空闲状态与体征波形报警标记）；底部为业务主线：来访登记、入住办理、在住管理、服务管理、财务管理。</desc>
+
+  <rect width="1200" height="432" rx="26" fill="#0D1B1E"/>
+
+  <g id="title-block" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+    <text x="64" y="78" font-size="20" letter-spacing="2" fill="#8AA3A8">智慧养老 · 一体化管理平台</text>
+    <text x="64" y="152" font-size="76" font-weight="700" fill="#E8F1F2">星海智伴</text>
+    <text x="64" y="202" font-size="26" fill="#C3D4D6">养老院员工用管理后台，家属用微信小程序，</text>
+    <text x="64" y="240" font-size="26" fill="#C3D4D6">护理任务、账单、异常报警由系统自动生成。</text>
+    <text x="64" y="286" font-size="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#8AA3A8">RuoYi-Vue 3.9.0 · Spring Boot 3.5 · Vue 3 · 8 个 Maven 模块</text>
+    <circle cx="70" cy="317" r="5" fill="#00B8A0"/>
+    <text x="84" y="323" font-size="18" fill="#9FB6B9">管理后台（员工端）</text>
+    <circle cx="288" cy="317" r="5" fill="#FE6A3D"/>
+    <text x="302" y="323" font-size="18" fill="#9FB6B9">家属端小程序（家属端）</text>
+  </g>
+
+  <g id="live-floor">
+    <rect x="700" y="56" width="436" height="272" rx="20" fill="#14262B" stroke="#21414A" stroke-width="1.5"/>
+    <text x="724" y="96" font-size="22" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#E8F1F2">智能床位</text>
+    <text x="822" y="96" font-size="16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#7C9498">示意</text>
+    <text x="1112" y="96" font-size="18" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#8AA3A8">3F · 301</text>
+    <line x1="724" y1="110" x2="1112" y2="110" stroke="#21414A" stroke-width="1.5"/>
+
+    <rect x="724" y="124" width="118" height="90" rx="14" fill="#0F2025" stroke="#21414A"/>
+    <text x="738" y="154" font-size="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#8AA3A8">301-01</text>
+    <text x="738" y="186" font-size="20" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#00B8A0">在住</text>
+    <circle cx="828" cy="148" r="5" fill="#00B8A0"/>
+
+    <rect x="858" y="124" width="118" height="90" rx="14" fill="#0F2025" stroke="#21414A"/>
+    <text x="872" y="154" font-size="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#8AA3A8">301-02</text>
+    <text x="872" y="186" font-size="20" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#00B8A0">在住</text>
+    <circle cx="962" cy="148" r="5" fill="#00B8A0"/>
+
+    <rect x="992" y="124" width="118" height="90" rx="14" fill="#0F2025" stroke="#21414A" stroke-dasharray="5 4"/>
+    <text x="1006" y="154" font-size="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#8AA3A8">301-03</text>
+    <text x="1006" y="186" font-size="20" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#7C9498">空闲</text>
+    <circle cx="1096" cy="148" r="5" fill="#3B565C"/>
+
+    <text x="724" y="246" font-size="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#7C9498">智能手环 · 实时体征</text>
+    <path d="M724 286 L744 286 L750 274 L756 298 L762 268 L768 302 L774 282 L780 286 L800 286 L806 276 L812 296 L818 272 L824 300 L830 284 L836 286 L856 286 L862 274 L868 298 L874 266 L880 304 L886 282 L892 286 L912 286 L918 276 L924 296 L930 270 L936 300 L942 284 L948 286 L968 286 L974 272 L980 300 L986 268 L992 302 L998 282 L1004 286 L1024 286 L1030 274 L1036 298 L1042 266 L1048 304 L1054 282 L1060 286 L1080 286 L1086 276 L1092 294 L1098 272 L1104 298 L1110 285 L1112 286" fill="none" stroke="#00B8A0" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="1042" cy="266" r="5" fill="#FFB302"/>
+    <text x="1054" y="262" font-size="18" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#FFB302">报警</text>
+  </g>
+
+  <g id="business-chain">
+    <line x1="64" y1="356" x2="1136" y2="356" stroke="#21414A" stroke-width="1.5"/>
+    <text x="64" y="394" font-size="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#7C9498">业务主线</text>
+    <rect x="220" y="368" width="162" height="40" rx="10" fill="#14262B" stroke="#21414A"/>
+    <text x="301" y="394" font-size="20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#D6E4E6">来访登记</text>
+    <text x="394" y="394" font-size="18" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#4E6E74">›</text>
+    <rect x="406" y="368" width="162" height="40" rx="10" fill="#14262B" stroke="#21414A"/>
+    <text x="487" y="394" font-size="20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#D6E4E6">入住办理</text>
+    <text x="580" y="394" font-size="18" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#4E6E74">›</text>
+    <rect x="592" y="368" width="162" height="40" rx="10" fill="#14262B" stroke="#21414A"/>
+    <text x="673" y="394" font-size="20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#D6E4E6">在住管理</text>
+    <text x="766" y="394" font-size="18" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#4E6E74">›</text>
+    <rect x="778" y="368" width="162" height="40" rx="10" fill="#14262B" stroke="#21414A"/>
+    <text x="859" y="394" font-size="20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#D6E4E6">服务管理</text>
+    <text x="952" y="394" font-size="18" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#4E6E74">›</text>
+    <rect x="964" y="368" width="162" height="40" rx="10" fill="#14262B" stroke="#21414A"/>
+    <text x="1045" y="394" font-size="20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#D6E4E6">财务管理</text>
+  </g>
+</svg>
