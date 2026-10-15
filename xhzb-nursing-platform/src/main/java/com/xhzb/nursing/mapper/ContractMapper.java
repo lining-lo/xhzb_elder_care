@@ -3,7 +3,10 @@ package com.xhzb.nursing.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 import com.xhzb.nursing.domain.Contract;
+import com.xhzb.nursing.domain.vo.MemberContractVo;
 
 /**
  * 合同Mapper接口
@@ -61,4 +64,13 @@ public interface ContractMapper extends BaseMapper<Contract>
      * @return 结果
      */
     public int deleteContractByIds(Long[] ids);
+
+    /**
+     * 分页查询小程序用户的合同列表
+     *
+     * @param page 分页参数
+     * @param familyMemberId 小程序用户ID
+     * @return 合同分页数据
+     */
+    public IPage<MemberContractVo> selectMemberContractList(IPage<MemberContractVo> page, @Param("familyMemberId") Long familyMemberId);
 }

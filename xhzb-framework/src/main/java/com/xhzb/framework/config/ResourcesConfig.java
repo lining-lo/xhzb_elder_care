@@ -51,7 +51,7 @@ public class ResourcesConfig implements WebMvcConfigurer {
         /**
          * 小程序端需要获取当前登录用户信息的接口（家人、参观预约相关接口），登录接口属于免登录接口，这里排除掉
          */
-        registry.addInterceptor(membersInterceptor).addPathPatterns("/member/user/**", "/member/reservation/**")
+        registry.addInterceptor(membersInterceptor).addPathPatterns("/member/user/**", "/member/reservation/**", "/member/contract/**", "/member/orders/**", "/member/bill/**")
                 .excludePathPatterns("/member/user/login");
     }
 

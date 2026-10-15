@@ -143,4 +143,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <resultMap type="com.xhzb.nursing.domain.vo.MemberContractVo" id="MemberContractVoResult">
+        <id property="id"    column="id"    />
+        <result property="contractNo"    column="contract_number"    />
+        <result property="name"    column="contract_name"    />
+        <result property="status"    column="status"    />
+        <result property="signDate"    column="sign_date"    />
+        <result property="startTime"    column="start_date"    />
+        <result property="endTime"    column="end_date"    />
+        <result property="releaseDate"    column="termination_date"    />
+        <result property="pdfUrl"    column="agreement_path"    />
+        <association property="elderVo" javaType="com.xhzb.nursing.domain.vo.MemberElderVo">
+            <result property="elderId"    column="elder_id"    />
+            <result property="name"    column="elder_name"    />
+            <result property="image"    column="elder_image"    />
+        </association>
+    </resultMap>
+
+    <select id="selectMemberContractList" resultMap="MemberContractVoResult">
+        select c.id, c.contract_number, c.contract_name, c.status, c.sign_date, c.start_date, c.end_date,
+               c.termination_date, c.agreement_path, c.elder_id, c.elder_name, e.image elder_image
+        from contract c
+                 left join elder e on e.id = c.elder_id
+                 inner join family_elder fe on fe.elder_id = c.elder_id
+        where fe.family_member_id = #{familyMemberId}
+        order by c.id desc
+    </select>
 </mapper>

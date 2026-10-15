@@ -9,7 +9,11 @@ import com.xhzb.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.ContractMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xhzb.common.utils.UserThreadLocal;
 import com.xhzb.nursing.domain.Contract;
+import com.xhzb.nursing.domain.vo.MemberContractVo;
 import com.xhzb.nursing.service.IContractService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.util.Arrays;
@@ -123,5 +127,19 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
 
         //批量更新
         updateBatchById(list);
+    }
+
+    /**
+     * 分页查询当前小程序用户的合同列表
+     *
+     * @param pageNum 页码
+     * @param pageSize 每页数量
+     * @return 合同分页数据
+     */
+    @Override
+    public IPage<MemberContractVo> selectMemberContractPage(long pageNum, long pageSize)
+    {
+        Long familyMemberId = UserThreadLocal.getUserId();
+        return contractMapper.selectMemberContractList(new Page<>(pageNum, pageSize), familyMemberId);
     }
 }

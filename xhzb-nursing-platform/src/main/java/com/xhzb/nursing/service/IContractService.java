@@ -2,7 +2,9 @@ package com.xhzb.nursing.service;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xhzb.nursing.domain.Contract;
+import com.xhzb.nursing.domain.vo.MemberContractVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -64,4 +66,13 @@ public interface IContractService extends IService<Contract> {
      * 更新合同状态
      */
     void updateContractStatus();
+
+    /**
+     * 分页查询当前小程序用户的合同列表
+     *
+     * @param pageNum 页码
+     * @param pageSize 每页数量
+     * @return 合同分页数据
+     */
+    public IPage<MemberContractVo> selectMemberContractPage(long pageNum, long pageSize);
 }
