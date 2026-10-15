@@ -76,7 +76,7 @@ public class MemberReservationController extends BaseController
     {
         if (Objects.nonNull(UserThreadLocal.getUserId()))
         {
-            reservation.setCreateBy(String.valueOf(UserThreadLocal.getUserId()));
+            reservation.setFamilyMemberId(UserThreadLocal.getUserId());
         }
         startPage();
         List<Reservation> list = reservationService.selectReservationList(reservation);

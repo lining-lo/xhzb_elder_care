@@ -1,6 +1,8 @@
 package com.xhzb.nursing.domain;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -66,6 +68,10 @@ public class Reservation extends BaseEntity
     @Excel(name = "预约状态", readConverterExp = "0=：待上门，1=已完成，2=已取消，3=已过期")
     private Integer status;
 
+    /** 小程序用户ID（family_member.id），管理端登记的预约为空 */
+    @Schema(title = "小程序用户ID")
+    private Long familyMemberId;
+
     /** 到院时间 */
     @Schema(title = "到院时间")
     @JsonDeserialize(using = ReservationDateTimeDeserializer.class)
@@ -89,7 +95,19 @@ public class Reservation extends BaseEntity
                 return null;
             }
             text = text.trim();
-            return text.contains("T") ? LocalDateTime.parse(text) : LocalDateTime.parse(text, DATE_TIME_FORMATTER);
+            if (text.contains("T"))
+            {
+                return LocalDateTime.parse(text);
+            }
+            try
+            {
+                return LocalDateTime.parse(text, DATE_TIME_FORMATTER);
+            }
+            catch (DateTimeParseException e)
+            {
+                // 兼容只传日期的情况（如管理端只选择到日期）
+                return LocalDate.parse(text).atStartOfDay();
+            }
         }
     }
 }
