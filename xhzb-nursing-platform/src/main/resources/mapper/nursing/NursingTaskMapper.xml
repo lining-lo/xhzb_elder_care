@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhzb.nursing.mapper.NursingTaskMapper">
+
+    <resultMap type="com.xhzb.nursing.domain.vo.NursingTaskVo" id="NursingTaskVoResult">
+        <id property="id"    column="id"    />
+        <result property="elderId"    column="elder_id"    />
+        <result property="elderName"    column="elder_name"    />
+        <result property="bedNumber"    column="bed_number"    />
+        <result property="idCardNo"    column="id_card_no"    />
+        <result property="sex"    column="sex"    />
+        <result property="nursingLevelName"    column="nursing_level_name"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="taskType"    column="task_type"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="estimatedServerTime"    column="estimated_server_time"    />
+        <result property="realServerTime"    column="real_server_time"    />
+        <result property="taskImage"    column="task_image"    />
+        <result property="mark"    column="mark"    />
+        <result property="cancelReason"    column="cancel_reason"    />
+        <result property="status"    column="status"    />
+        <result property="updater"    column="updater"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <collection property="nursingName" ofType="java.lang.String" column="elder_id"
+                    select="selectNursingNameByElderId"/>
+    </resultMap>
+
+    <sql id="selectNursingTaskVo">
+        select t.id, t.elder_id, e.name elder_name, e.bed_number, e.id_card_no,
+               case e.sex when 0 then '女' when 1 then '男' end sex,
+               ci.nursing_level_name,
+               t.project_id, p.name project_name, t.task_type, t.plan_id,
+               t.estimated_server_time, t.real_server_time, t.task_image, t.mark, t.cancel_reason, t.status,
+               t.create_time, t.update_time, t.remark,
+               su.nick_name updater
+        from nursing_task t
+                 left join elder e on e.id = t.elder_id
+                 left join nursing_project p on p.id = t.project_id
+                 left join sys_user su on su.user_id = t.update_by
+                 left join check_in ci on ci.id = (select max(ci2.id) from check_in ci2 where ci2.elder_id = t.elder_id)
+    </sql>
+
+    <select id="selectNursingTaskList" parameterType="com.xhzb.nursing.domain.dto.NursingTaskQueryDto" resultMap="NursingTaskVoResult">
+        <include refid="selectNursingTaskVo"/>
+        <where>
+            <if test="status != null "> and t.status = #{status}</if>
+            <if test="elderName != null  and elderName != ''"> and e.name like concat('%', #{elderName}, '%')</if>
+            <if test="projectId != null "> and t.project_id = #{projectId}</if>
+            <if test="nurseId != null "> and exists (select 1 from nursing_elder ne where ne.elder_id = t.elder_id and ne.nursing_id = #{nurseId})</if>
+            <if test="startTime != null  and startTime != ''"> and t.estimated_server_time &gt;= #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and t.estimated_server_time &lt;= #{endTime}</if>
+        </where>
+        order by t.estimated_server_time, t.id
+    </select>
+
+    <select id="selectNursingTaskById" parameterType="Long" resultMap="NursingTaskVoResult">
+        <include refid="selectNursingTaskVo"/>
+        where t.id = #{id}
+    </select>
+
+    <select id="selectNursingNameByElderId" resultType="java.lang.String">
+        select u.nick_name
+        from nursing_elder ne
+                 inner join sys_user u on u.user_id = ne.nursing_id and u.del_flag = '0'
+        where ne.elder_id = #{elderId}
+        order by ne.id
+    </select>
+</mapper>
