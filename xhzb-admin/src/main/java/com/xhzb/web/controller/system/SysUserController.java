@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.xhzb.common.annotation.Log;
 import com.xhzb.common.core.controller.BaseController;
 import com.xhzb.common.core.domain.AjaxResult;
+import com.xhzb.common.core.domain.R;
 import com.xhzb.common.core.domain.entity.SysDept;
 import com.xhzb.common.core.domain.entity.SysRole;
 import com.xhzb.common.core.domain.entity.SysUser;
@@ -25,6 +26,8 @@ import com.xhzb.system.service.ISysDeptService;
 import com.xhzb.system.service.ISysPostService;
 import com.xhzb.system.service.ISysRoleService;
 import com.xhzb.system.service.ISysUserService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * 用户信息
@@ -57,6 +60,19 @@ public class SysUserController extends BaseController
         startPage();
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
+    }
+
+    /**
+     * 根据部门编号查询员工列表（负责老人-设置护理员下拉数据）
+     */
+    @Operation(summary = "根据部门编号查询员工列表")
+    @GetMapping("/listByDeptId")
+    public R<List<SysUser>> listByDeptId(@RequestParam("deptId") Long deptId)
+    {
+        SysUser user = new SysUser();
+        user.setDeptId(deptId);
+        user.setStatus("0");
+        return R.ok(userService.selectUserList(user));
     }
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
