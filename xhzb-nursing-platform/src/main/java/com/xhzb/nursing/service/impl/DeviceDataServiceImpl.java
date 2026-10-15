@@ -30,6 +30,9 @@ import org.springframework.stereotype.Service;
 import com.xhzb.nursing.mapper.DeviceDataMapper;
 import com.xhzb.nursing.domain.DeviceData;
 import com.xhzb.nursing.service.IDeviceDataService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.util.Arrays;
@@ -275,5 +278,37 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
         propertyVo.setEventTime(deviceData.getAlarmTime());
         propertyVo.setValue(deviceData.getDataValue());
         return propertyVo;
+    }
+
+    /**
+     * 分页查询设备上报数据（小程序健康数据明细）
+     *
+     * @param pageNum 页码
+     * @param pageSize 每页数量
+     * @param iotId 设备ID
+     * @param functionId 功能ID
+     * @param startTime 开始时间（时间戳）
+     * @param endTime 结束时间（时间戳）
+     * @return 设备上报数据分页
+     */
+    @Override
+    public IPage<DeviceData> selectDeviceDataPage(long pageNum, long pageSize, String iotId, String functionId,
+                                                 Long startTime, Long endTime)
+    {
+        return page(new Page<>(pageNum, pageSize), Wrappers.<DeviceData>lambdaQuery()
+                .eq(StringUtils.isNotEmpty(iotId), DeviceData::getIotId, iotId)
+                .eq(StringUtils.isNotEmpty(functionId), DeviceData::getFunctionId, functionId)
+                .ge(Objects.nonNull(startTime), DeviceData::getAlarmTime, toLocalDateTime(startTime))
+                .le(Objects.nonNull(endTime), DeviceData::getAlarmTime, toLocalDateTime(endTime))
+                .orderByDesc(DeviceData::getAlarmTime));
+    }
+
+    /**
+     * 把时间戳转换为 LocalDateTime
+     */
+    private LocalDateTime toLocalDateTime(Long time)
+    {
+        return Objects.isNull(time) ? null
+                : Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }

@@ -2,6 +2,7 @@ package com.xhzb.nursing.service;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xhzb.nursing.domain.DeviceData;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xhzb.nursing.domain.IotMsgNotifyData;
@@ -98,4 +99,18 @@ public interface IDeviceDataService extends IService<DeviceData> {
      * @return 统计数据
      */
     public List<DeviceDataTrendVo> selectDataListByWeek(String iotId, String functionId, Long startTime, Long endTime);
+
+    /**
+     * 分页查询设备上报数据（小程序健康数据明细）
+     *
+     * @param pageNum 页码
+     * @param pageSize 每页数量
+     * @param iotId 设备ID
+     * @param functionId 功能ID
+     * @param startTime 开始时间（时间戳）
+     * @param endTime 结束时间（时间戳）
+     * @return 设备上报数据分页
+     */
+    public IPage<DeviceData> selectDeviceDataPage(long pageNum, long pageSize, String iotId, String functionId,
+                                                  Long startTime, Long endTime);
 }

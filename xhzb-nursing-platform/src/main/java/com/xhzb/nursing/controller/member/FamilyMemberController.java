@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.xhzb.common.core.controller.BaseController;
 import com.xhzb.common.core.domain.AjaxResult;
+import com.xhzb.common.utils.StringUtils;
 import com.xhzb.nursing.domain.dto.ElderBindingDto;
 import com.xhzb.nursing.domain.dto.UserLoginRequestDto;
 import com.xhzb.nursing.domain.vo.LoginVo;
 import com.xhzb.nursing.service.IDeviceDataService;
 import com.xhzb.nursing.service.IFamilyElderService;
 import com.xhzb.nursing.service.IFamilyMemberService;
+
+import java.util.Map;
+import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -119,5 +123,37 @@ public class FamilyMemberController extends BaseController {
                                                 @RequestParam(value = "startTime", required = false) Long startTime,
                                                 @RequestParam(value = "endTime", required = false) Long endTime) {
         return success(deviceDataService.selectDataListByWeek(iotId, functionId, startTime, endTime));
+    }
+
+    /**
+     * 分页查询设备上报数据（健康数据明细）
+     */
+    @GetMapping("/pageQueryAlertData")
+    @Operation(summary = "分页查询设备上报数据")
+    public AjaxResult pageQueryAlertData(@RequestParam(value = "pageNum", defaultValue = "1") long pageNum,
+                                         @RequestParam(value = "pageSize", defaultValue = "10") long pageSize,
+                                         @RequestParam(value = "iotId", required = false) String iotId,
+                                         @RequestParam(value = "functionId", required = false) String functionId,
+                                         @RequestParam(value = "startTime", required = false) Long startTime,
+                                         @RequestParam(value = "endTime", required = false) Long endTime)
+    {
+        return success(deviceDataService.selectDeviceDataPage(pageNum, pageSize, iotId, functionId, startTime, endTime));
+    }
+
+    /**
+     * 查询设备属性（设备最新上报的属性值）
+     */
+    @PostMapping("/QueryDevicePropertyStatus")
+    @Operation(summary = "查询设备属性")
+    public AjaxResult queryDevicePropertyStatus(@RequestBody(required = false) Map<String, Object> body,
+                                                @RequestParam(value = "iotId", required = false) String iotId)
+    {
+        String deviceId = iotId;
+        if (StringUtils.isEmpty(deviceId) && Objects.nonNull(body))
+        {
+            Object value = body.getOrDefault("iotId", body.get("deviceId"));
+            deviceId = Objects.isNull(value) ? null : String.valueOf(value);
+        }
+        return success(deviceDataService.selectLatestPropertyList(deviceId));
     }
 }
