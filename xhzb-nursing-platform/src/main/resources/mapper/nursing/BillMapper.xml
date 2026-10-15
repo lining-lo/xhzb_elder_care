@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhzb.nursing.mapper.BillMapper">
+
+    <resultMap type="com.xhzb.nursing.domain.vo.MemberBillVo" id="MemberBillVoResult">
+        <id property="id"    column="id"    />
+        <result property="billNo"    column="bill_no"    />
+        <result property="billType"    column="bill_type"    />
+        <result property="billMonth"    column="bill_month"    />
+        <result property="billStartTime"    column="bill_start_time"    />
+        <result property="billEndTime"    column="bill_end_time"    />
+        <result property="totalDays"    column="total_days"    />
+        <result property="lname"    column="lname"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="checkInConfigId"    column="check_in_config_id"    />
+        <result property="bedCost"    column="bed_cost"    />
+        <result property="nursingCost"    column="nursing_cost"    />
+        <result property="otherCost"    column="other_cost"    />
+        <result property="medicalInsurancePayment"    column="medical_insurance_payment"    />
+        <result property="governmentSubsidy"    column="government_subsidy"    />
+        <result property="monthCost"    column="month_cost"    />
+        <result property="currentCost"    column="current_cost"    />
+        <result property="depositAmount"    column="deposit_amount"    />
+        <result property="billAmount"    column="bill_amount"    />
+        <result property="prepaidAmount"    column="prepaid_amount"    />
+        <result property="payableAmount"    column="payable_amount"    />
+        <result property="transactionStatus"    column="transaction_status"    />
+        <result property="paymentDeadline"    column="payment_deadline"    />
+        <result property="transactionTime"    column="transaction_time"    />
+        <result property="createTime"    column="create_time"    />
+
+        <association property="elderVo" javaType="com.xhzb.nursing.domain.vo.MemberElderVo"
+                     column="elder_id" select="selectMemberBillElderVo"/>
+    </resultMap>
+
+    <sql id="selectMemberBillVo">
+        select b.id, b.bill_no, b.bill_type, b.bill_month, b.bill_start_time, b.bill_end_time, b.total_days,
+               b.lname, b.type_name, b.bed_cost, b.nursing_cost, b.other_cost, b.medical_insurance_payment, b.government_subsidy, b.month_cost, b.current_cost, b.deposit_amount, b.bill_amount, b.prepaid_amount,
+               b.payable_amount, b.transaction_status, b.payment_deadline, b.transaction_time, b.create_time,
+               b.check_in_config_id, b.elder_id
+        from bill b
+    </sql>
+
+    <select id="selectMemberBillList" resultMap="MemberBillVoResult">
+        <include refid="selectMemberBillVo"/>
+        where exists (select 1 from family_elder fe where fe.elder_id = b.elder_id and fe.family_member_id = #{familyMemberId})
+        <if test="transactionStatus != null "> and b.transaction_status = #{transactionStatus}</if>
+        <if test="elderId != null "> and b.elder_id = #{elderId}</if>
+        order by b.id desc
+    </select>
+
+    <select id="selectMemberBillById" parameterType="Long" resultMap="MemberBillVoResult">
+        <include refid="selectMemberBillVo"/>
+        where b.id = #{id}
+    </select>
+
+    <select id="selectMemberBillElderVo" parameterType="Long" resultType="com.xhzb.nursing.domain.vo.MemberElderVo">
+        select id elderId, name, image from elder where id = #{elderId}
+    </select>
+</mapper>
