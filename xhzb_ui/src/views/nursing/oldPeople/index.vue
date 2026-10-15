@@ -35,9 +35,8 @@
 </template>
 <script setup>
 import useUserStore from '@/store/modules/user';
-import {getAllUserList} from '@/api/system/user';
 // 接口
-import {getRoomBedWithNurList, listAllWithNurFloor, setNursing,} from '@/api/nursing/floor';
+import {getRoomBedWithNurList, listAllWithNurFloor, setNursing, listNursingUser} from '@/api/nursing/floor';
 // 组件
 // tab切换
 import SwitchBar from '@/components/switchBar/SwitchBartop.vue';
@@ -75,7 +74,7 @@ onMounted(() => {
     routeType.value = route.query.type;
   }
   getAllFloorList();
-  getAllUserListFunc();
+  listNursingUserFunc();
 });
 // ------定义方法------
 // 获取单个设置老人的护理人数据
@@ -104,8 +103,8 @@ const handleSubmit = async (val) => {
   }
 };
 // 获取护理员下拉数据
-const getAllUserListFunc = async () => {
-  const res = await getAllUserList({ deptId: '211' });
+const listNursingUserFunc = async () => {
+  const res = await listNursingUser();
   nurseList.value = res.data;
   //   nurseList.value = res.data.map((item) => {
   //     return { value: item.id, label: item.nickName }

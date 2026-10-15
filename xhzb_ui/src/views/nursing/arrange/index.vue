@@ -200,7 +200,7 @@
 <script setup name="AlertData">
 // 接口
 import {cancelPlan, changePlanTime, executePlan, listNursingTask} from '@/api/nursing/nursingTask';
-import {getAllUserList} from '@/api/system/user';
+import {listNursingUser} from '@/api/nursing/floor';
 import {getProjectAll} from '@/api/nursing/project';
 import dayjs from 'dayjs';
 // 组件
@@ -339,8 +339,8 @@ const handleSubmitTime = async (val) => {
   }
 }
 // 获取护理员列表
-const getAllUserListFunc = async () => {
-  const res = await getAllUserList({ deptId: '211' });
+const listNursingUserFunc = async () => {
+  const res = await listNursingUser();
   nurseList.value = res.data;
 };
 //查询所有护理项目
@@ -387,6 +387,6 @@ const handleCheck = (val) => {
   });
 };
 getList();
-getAllUserListFunc();
+listNursingUserFunc();
 getAllProjectList();
 </script>

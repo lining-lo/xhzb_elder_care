@@ -167,3 +167,11 @@ export function setNursing(data) {
     data: data
   })
 }
+
+// 查询护理员列表（按护理员角色查询，不写死部门）
+export function listNursingUser() {
+  return request({
+    url: '/elder/nursingElder/listNursing',
+    method: 'get'
+  })
+}
