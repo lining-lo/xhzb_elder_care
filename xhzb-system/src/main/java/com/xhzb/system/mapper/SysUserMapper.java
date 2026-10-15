@@ -129,4 +129,11 @@ public interface SysUserMapper
      */
     public SysUser checkEmailUnique(String email);
 
+    /**
+     * 根据角色标识查询用户列表（状态正常）
+     *
+     * @param roleKey 角色标识
+     * @return 用户列表
+     */
+    public List<SysUser> selectUserListByRoleKey(String roleKey);
 }

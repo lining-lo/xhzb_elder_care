@@ -204,5 +204,11 @@ public interface ISysUserService
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
 
-
+    /**
+     * 根据角色标识查询用户列表（状态正常的用户）
+     *
+     * @param roleKey 角色标识
+     * @return 用户列表
+     */
+    public List<SysUser> selectUserListByRoleKey(String roleKey);
 }

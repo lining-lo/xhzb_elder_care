@@ -547,4 +547,16 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
+
+    /**
+     * 根据角色标识查询用户列表（状态正常的用户）
+     *
+     * @param roleKey 角色标识
+     * @return 用户列表
+     */
+    @Override
+    public List<SysUser> selectUserListByRoleKey(String roleKey)
+    {
+        return userMapper.selectUserListByRoleKey(roleKey);
+    }
 }

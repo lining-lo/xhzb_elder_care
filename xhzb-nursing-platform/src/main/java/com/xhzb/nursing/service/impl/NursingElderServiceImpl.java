@@ -5,16 +5,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xhzb.common.core.domain.entity.SysUser;
 import com.xhzb.common.exception.ServiceException;
 import com.xhzb.nursing.domain.NursingElder;
 import com.xhzb.nursing.domain.dto.ElderNursingDto;
 import com.xhzb.nursing.mapper.NursingElderMapper;
+import com.xhzb.nursing.constants.SystemConstants;
 import com.xhzb.nursing.service.INursingElderService;
+import com.xhzb.system.service.ISysUserService;
 
 /**
  * 护理员老人关联Service业务层处理
@@ -25,6 +29,9 @@ import com.xhzb.nursing.service.INursingElderService;
 @Service
 public class NursingElderServiceImpl extends ServiceImpl<NursingElderMapper, NursingElder> implements INursingElderService
 {
+    @Autowired
+    private ISysUserService userService;
+
     /**
      * 给老人设置护理员（先清空老人原有的护理员，再保存本次选择的护理员）
      *
@@ -68,5 +75,16 @@ public class NursingElderServiceImpl extends ServiceImpl<NursingElderMapper, Nur
             saveBatch(nursingElderList);
         }
         return true;
+    }
+
+    /**
+     * 查询护理员列表（按「护理员」角色查询，不依赖写死的部门）
+     *
+     * @return 护理员列表
+     */
+    @Override
+    public List<SysUser> listNursingUser()
+    {
+        return userService.selectUserListByRoleKey(SystemConstants.NURSING_ROLE_KEY);
     }
 }

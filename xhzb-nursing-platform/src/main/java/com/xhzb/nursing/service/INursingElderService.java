@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xhzb.nursing.domain.NursingElder;
+import com.xhzb.common.core.domain.entity.SysUser;
 import com.xhzb.nursing.domain.dto.ElderNursingDto;
 
 /**
@@ -21,4 +22,11 @@ public interface INursingElderService extends IService<NursingElder>
      * @return 结果
      */
     public boolean setNursing(List<ElderNursingDto> elderNursingList);
+
+    /**
+     * 查询护理员列表（按「护理员」角色查询，不依赖写死的部门）
+     *
+     * @return 护理员列表
+     */
+    public List<SysUser> listNursingUser();
 }
