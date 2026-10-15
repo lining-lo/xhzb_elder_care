@@ -36,6 +36,10 @@ public class NursingTask extends BaseEntity
     @Schema(title = "护理计划ID")
     private Long planId;
 
+    /** 服务单ID（计划外任务的来源） */
+    @Schema(title = "服务单ID")
+    private Long orderId;
+
     /** 任务类型（1：护理计划外，2：护理计划内） */
     @Schema(title = "任务类型（1：护理计划外，2：护理计划内）")
     private Integer taskType;

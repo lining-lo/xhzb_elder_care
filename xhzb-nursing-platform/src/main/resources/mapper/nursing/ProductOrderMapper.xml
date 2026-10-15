@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhzb.nursing.mapper.ProductOrderMapper">
+
+    <resultMap type="com.xhzb.nursing.domain.vo.MemberOrderVo" id="MemberOrderVoResult">
+        <id property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="estimatedArrivalTime"    column="estimated_arrival_time"    />
+        <result property="amount"    column="amount"    />
+        <result property="status"    column="status"    />
+        <result property="tradingOrderNo"    column="trading_order_no"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="cancelReason"    column="cancel_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <association property="nursingProjectVo" javaType="com.xhzb.nursing.domain.NursingProject"
+                     column="project_id" select="com.xhzb.nursing.mapper.NursingProjectMapper.selectNursingProjectById"/>
+        <association property="elderVo" javaType="com.xhzb.nursing.domain.vo.MemberElderVo"
+                     column="elder_id" select="selectMemberElderVo"/>
+        <association property="refundRecordVo" javaType="com.xhzb.nursing.domain.RefundRecord">
+            <id property="id"    column="refund_id"    />
+            <result property="orderId"    column="refund_order_id"    />
+            <result property="tradingOrderNo"    column="refund_trading_order_no"    />
+            <result property="tradingChannel"    column="refund_trading_channel"    />
+            <result property="refundAmount"    column="refund_amount"    />
+            <result property="refundStatus"    column="refund_status"    />
+            <result property="refundTime"    column="refund_time"    />
+        </association>
+    </resultMap>
+
+    <sql id="selectMemberOrderVo">
+        select o.id, o.order_no, o.elder_id, o.project_id, o.estimated_arrival_time, o.amount, o.status,
+               o.trading_order_no, o.pay_time, o.cancel_reason, o.remark, o.create_time,
+               r.id refund_id, r.order_id refund_order_id, r.trading_order_no refund_trading_order_no,
+               r.trading_channel refund_trading_channel, r.refund_amount, r.refund_status, r.refund_time
+        from product_order o
+                 left join refund_record r on r.id = (select max(r2.id) from refund_record r2 where r2.order_id = o.id)
+    </sql>
+
+    <select id="selectMemberOrderList" resultMap="MemberOrderVoResult">
+        <include refid="selectMemberOrderVo"/>
+        <where>
+            o.family_member_id = #{familyMemberId}
+            <if test="status != null "> and o.status = #{status}</if>
+        </where>
+        order by o.id desc
+    </select>
+
+    <select id="selectMemberOrderById" parameterType="Long" resultMap="MemberOrderVoResult">
+        <include refid="selectMemberOrderVo"/>
+        where o.id = #{id}
+    </select>
+
+    <select id="selectMemberElderVo" parameterType="Long" resultType="com.xhzb.nursing.domain.vo.MemberElderVo">
+        select id elderId, name, image from elder where id = #{elderId}
+    </select>
+</mapper>
